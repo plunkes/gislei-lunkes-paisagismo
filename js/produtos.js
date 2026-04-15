@@ -1,5 +1,4 @@
 // Mock lendário
-
 const PRODUCTS = [
   { id: 1, category: 'kokedama', badge: 'novo', name: 'Kokedama Monstera', desc: 'Monstera deliciosa cultivada em bola de musgo artesanal. Perfeita para ambientes iluminados.', price: 89.90, oldPrice: null, img: 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=600&q=80', stock: 'disponivel' },
   { id: 2, category: 'kokedama', badge: null, name: 'Kokedama Samambaia', desc: 'Samambaia exuberante com textura delicada, ideal para varanda e banheiro.', price: 64.90, oldPrice: null, img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80', stock: 'disponivel' },
@@ -15,8 +14,6 @@ const PRODUCTS = [
 
 
 // Carrinho 
-
-
 let cart = JSON.parse(localStorage.getItem('cart_local') || '[]');
 let maxPrice = 500;
 let sortMode = 'default';
@@ -222,7 +219,7 @@ function checkout() {
   if (!localStorage.getItem('gl_logged_in')) {
     window.location.href = 'login.html';
   } else {
-    alert('Redirecionando para pagamento…');
+    alert('Imagine uma página de pagamento muito legal…');
   }
 }
 

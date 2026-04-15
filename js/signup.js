@@ -1,5 +1,4 @@
-
-/*Força de senha*/
+// Senha forte :) 
 document.getElementById('su-senha').addEventListener('input', function () {
   const v = this.value;
   const fill = document.getElementById('strength-fill');
