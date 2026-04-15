@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro — Gislei Lunkes Paisagismo</title>
+  <meta name="description"
+    content="Crie sua conta Gislei Lunkes Paisagismo — Semear a alegria do convívio com a Natureza.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/signup.css">
+</head>
+
+<body>
+
+  <!-- header -->
+  <header id="inicio">
+    <div class="header-logo-area">
+      <div class="header-logo">
+        <a href="index.html"><img src="./icons/gi_lunkes.svg"></a>
+      </div>
+    </div>
+    <div class="header-social">
+      <a href="https://www.instagram.com/gi.lunkes/" title="Instagram">
+        <img src="./icons/instagram.svg" width="22" height="22">
+      </a>
+      <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn">
+        <img src="./icons/linkedin.svg" width="22" height="22">
+      </a>
+      <a href="gisleilv@gmail.com" title="Email">
+        <img src="./icons/email.svg" width="22" height="22">
+      </a>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html">Início</a>
+      <a href="index.html#contato">Contato</a>
+      <div class="nav-tabs">
+        <a href="produtos.html" class="nav-btn">Produtos</a>
+        <a href="login.html" class="nav-btn">Login</a>
+        <a href="signup.html" class="nav-btn active">Sign In</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- signup -->
+  <section class="signup-hero">
+    <div class="signup-hero-bg"></div>
+    <div class="signup-card" id="signup-card">
+
+      <!-- formulario -->
+      <div id="form-state">
+        <h2>Criar conta</h2>
+        <p class="subtitle">Junte-se a nós e semear a alegria da natureza</p>
+
+        <form onsubmit="handleSignup(event)" id="signup-form" novalidate>
+          <div class="form-field">
+            <label for="su-nome">Nome completo</label>
+            <input type="text" id="su-nome" placeholder="Seu nome" autocomplete="name" required>
+            <span class="field-error" id="err-nome">Por favor insira seu nome.</span>
+          </div>
+          <div class="form-field">
+            <label for="su-email">E-mail</label>
+            <input type="email" id="su-email" placeholder="seu@email.com" autocomplete="email" required>
+            <span class="field-error" id="err-email">E-mail inválido.</span>
+          </div>
+          <div class="form-field">
+            <label for="su-usuario">Usuário</label>
+            <input type="text" id="su-usuario" placeholder="Nome de usuário único" autocomplete="username" required
+              minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+">
+            <span class="field-hint">Somente letras, números e _ (mín. 3 caracteres)</span>
+            <span class="field-error" id="err-usuario">Usuário inválido (min. 3 caracteres, sem espaços).</span>
+          </div>
+          <div class="form-field">
+            <label for="su-senha">Senha</label>
+            <input type="password" id="su-senha" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required
+              minlength="8">
+            <div class="strength-bar">
+              <div class="strength-bar-fill" id="strength-fill"></div>
+            </div>
+            <span class="strength-label" id="strength-label"></span>
+            <span class="field-error" id="err-senha">A senha deve ter pelo menos 8 caracteres.</span>
+          </div>
+          <div class="form-field">
+            <label for="su-confirma">Confirmar senha</label>
+            <input type="password" id="su-confirma" placeholder="Repita a senha" autocomplete="new-password" required>
+            <span class="field-error" id="err-confirma">As senhas não coincidem.</span>
+          </div>
+          <button type="submit" class="btn-cadastrar" id="btn-cadastrar">Cadastrar</button>
+        </form>
+
+        <p class="login-link">Já tem uma conta? <a href="login.html">Entrar</a></p>
+      </div>
+
+      <!-- success -->
+      <div class="success-overlay" id="success-state">
+        <div class="check-icon">
+          <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h3>Conta criada!</h3>
+        <p>Bem-vindo(a) à família Gislei Lunkes Paisagismo.<br>Redirecionando para o início…</p>
+        <div class="redirect-bar">
+          <div class="redirect-bar-fill" id="redirect-fill"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer>
+    <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+  </footer>
+
+  <script src="js/signup.js"></script>
+  <script src="js/shared.js"></script>
+</body>
+
+</html>

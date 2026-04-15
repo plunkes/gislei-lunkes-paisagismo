@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Gislei Lunkes Paisagismo</title>
+  <meta name="description"
+    content="Faça login na sua conta Gislei Lunkes Paisagismo — Semear a alegria do convívio com a Natureza.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+  <!-- header -->
+  <header id="inicio">
+    <div class="header-logo-area">
+      <div class="header-logo">
+        <a href="index.html"><img src="./icons/gi_lunkes.svg"></a>
+      </div>
+    </div>
+    <div class="header-social">
+      <a href="https://www.instagram.com/gi.lunkes/" title="Instagram">
+        <img src="./icons/instagram.svg" width="22" height="22">
+      </a>
+      <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn">
+        <img src="./icons/linkedin.svg" width="22" height="22">
+      </a>
+      <a href="gisleilv@gmail.com" title="Email">
+        <img src="./icons/email.svg" width="22" height="22">
+      </a>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html">Início</a>
+      <a href="index.html#contato">Contato</a>
+      <div class="nav-tabs">
+        <a href="produtos.html" class="nav-btn">Produtos</a>
+        <a href="login.html" class="nav-btn active">Login</a>
+        <a href="signup.html" class="nav-btn">Sign In</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- login -->
+  <section class="login-hero">
+    <div class="login-hero-bg"></div>
+    <div class="login-card" id="login-card">
+      <h2>Usuário</h2>
+      <form onsubmit="handleLogin(event)" id="login-form">
+        <div class="form-field">
+          <label for="login-usuario">Usuário</label>
+          <input type="text" id="login-usuario" placeholder="Seu nome de usuário" autocomplete="username" required>
+        </div>
+        <div class="form-field">
+          <label for="login-senha">Senha</label>
+          <input type="password" id="login-senha" placeholder="Sua senha" autocomplete="current-password" required>
+        </div>
+        <div class="forgot-link">
+          <a href="#">Esqueci minha senha</a>
+        </div>
+        <button type="submit" class="btn-entrar" id="btn-entrar">Entrar</button>
+      </form>
+      <div class="card-divider"><span>Formas alternativas</span></div>
+      <div class="social-login">
+        <a href="#" title="Email" id="social-email">
+          <img src="./icons/email.svg" width="22" height="22">
+        </a>
+        <a href="#" title="Facebook" id="social-facebook">
+          <img src="./icons/facebook.svg" width="22" height="22">
+        </a>
+        <a href="#" title="Instagram" id="social-instagram">
+          <img src="./icons/instagram.svg" width="22" height="22">
+        </a>
+        <a href="#" title="Pinterest" id="social-pinterest">
+          <img src="./icons/pinterest.svg" width="22" height="22">
+        </a>
+      </div>
+      <p class="register-link">Não tem conta? <a href="signup.html">Cadastre-se</a></p>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer>
+    <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+  </footer>
+
+  <script src="js/login.js"></script>
+</body>
+
+</html>

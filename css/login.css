@@ -1,0 +1,226 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-hero {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+.login-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url("../imgs/background-singup.jpg") center/cover no-repeat;
+}
+
+.login-hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 40, 37, 0.15);
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+  background: var(--c-card);
+  border-radius: 40px;
+  padding: 56px 64px 52px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: cardFadeIn 0.7s ease both;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.login-card h2 {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--c-text);
+  margin-bottom: 32px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.form-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+  letter-spacing: 0.02em;
+}
+
+.form-field input {
+  background: var(--c-pale);
+  border: 1px solid var(--c-text);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--c-text);
+  height: 38px;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.form-field input:focus {
+  border-color: var(--c-mid);
+  box-shadow: 0 0 0 3px rgba(82, 121, 111, 0.15);
+}
+
+.form-field input::placeholder {
+  color: var(--c-text-sub);
+  opacity: 0.5;
+}
+
+.forgot-link {
+  text-align: right;
+  margin-top: -8px;
+  margin-bottom: 24px;
+}
+
+.forgot-link a {
+  font-size: 12px;
+  color: var(--c-mid);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.forgot-link a:hover {
+  color: var(--c-forest);
+  text-decoration: underline;
+}
+
+.btn-entrar {
+  width: 100%;
+  background: var(--c-btn);
+  color: var(--c-white);
+  border: 1px solid var(--c-btn);
+  border-radius: 20px;
+  padding: 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
+}
+
+.btn-entrar:hover {
+  background: var(--c-forest);
+  border-color: var(--c-forest);
+}
+
+.btn-entrar:active {
+  transform: scale(0.98);
+}
+
+.card-divider {
+  display: flex;
+  align-items: center;
+  margin: 28px 0 20px;
+}
+
+.card-divider::before,
+.card-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--c-text);
+  opacity: 0.2;
+}
+
+.card-divider span {
+  font-size: 13px;
+  color: var(--c-text);
+  padding: 0 16px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.social-login a {
+  width: 42px;
+  height: 42px;
+  background: var(--c-social);
+  border: 1px solid var(--c-social);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.social-login a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: var(--c-mint);
+}
+
+.social-login a svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--c-forest);
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--c-text-sub);
+}
+
+.register-link a {
+  color: var(--c-mid);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.register-link a:hover {
+  color: var(--c-forest);
+  text-decoration: underline;
+}
+
+/*Responsivo*/
+@media (max-width: 960px) {
+  .login-hero {
+    min-height: 500px;
+    padding: 32px 16px;
+  }
+
+  .login-card {
+    padding: 40px 28px 36px;
+    border-radius: 28px;
+    max-width: 100%;
+  }
+}

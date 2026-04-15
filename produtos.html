@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos — Gislei Lunkes Paisagismo</title>
+  <meta name="description" content="Conheça nossos kokedamas, arranjos florais, vasos e serviços de paisagismo.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/produtos.css">
+</head>
+
+<body>
+
+  <!-- header -->
+  <header id="inicio">
+    <div class="header-logo-area">
+      <div class="header-logo">
+        <a href="index.html"><img src="./icons/gi_lunkes.svg"></a>
+      </div>
+    </div>
+    <div class="header-social">
+      <a href="https://www.instagram.com/gi.lunkes/" title="Instagram">
+        <img src="./icons/instagram.svg" width="22" height="22">
+      </a>
+      <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn">
+        <img src="./icons/linkedin.svg" width="22" height="22">
+      </a>
+      <a href="gisleilv@gmail.com" title="Email">
+        <img src="./icons/email.svg" width="22" height="22">
+      </a>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html">Início</a>
+      <a href="index.html#contato">Contato</a>
+      <div class="nav-tabs">
+        <a href="produtos.html" class="nav-btn active">Produtos</a>
+        <a href="login.html" class="nav-btn">Login</a>
+        <a href="signup.html" class="nav-btn">Sign In</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- carrinho -->
+  <div class="cart-sticky-bar">
+    <button class="cart-trigger-btn" onclick="toggleCart()" id="cart-trigger" aria-label="Abrir carrinho">
+      <svg viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 01-8 0" />
+      </svg>
+      Carrinho
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+  </div>
+
+  <!-- produtos a venda -->
+  <div class="shop-wrapper">
+
+    <!-- sidebar de filtro -->
+    <aside class="sidebar">
+      <h3>Filtrar produtos</h3>
+
+      <div class="filter-group">
+        <p class="filter-group-title">Categoria</p>
+        <label class="filter-option"><input type="checkbox" value="kokedama" onchange="applyFilters()" checked>
+          <label>Kokedamas</label></label>
+        <label class="filter-option"><input type="checkbox" value="arranjo" onchange="applyFilters()" checked>
+          <label>Arranjos Florais</label></label>
+        <label class="filter-option"><input type="checkbox" value="vaso" onchange="applyFilters()" checked> <label>Vasos
+            &amp; Cachepots</label></label>
+        <label class="filter-option"><input type="checkbox" value="servico" onchange="applyFilters()" checked>
+          <label>Serviços</label></label>
+        <label class="filter-option"><input type="checkbox" value="acessorio" onchange="applyFilters()" checked>
+          <label>Acessórios</label></label>
+      </div>
+
+      <hr class="filter-divider">
+
+      <div class="filter-group">
+        <p class="filter-group-title">Preço máximo</p>
+        <div class="price-range-labels">
+          <span>R$ 0</span>
+          <span id="price-label">R$ 500</span>
+        </div>
+        <input type="range" id="price-range" min="0" max="500" value="500" step="10" oninput="updatePrice(this.value)">
+      </div>
+
+      <hr class="filter-divider">
+
+      <div class="filter-group">
+        <p class="filter-group-title">Disponibilidade</p>
+        <label class="filter-option"><input type="checkbox" value="disponivel" onchange="applyFilters()" checked>
+          <label>Em estoque</label></label>
+        <label class="filter-option"><input type="checkbox" value="encomenda" onchange="applyFilters()"> <label>Sob
+            encomenda</label></label>
+      </div>
+
+      <button class="btn-filter-reset" onclick="resetFilters()">Limpar filtros</button>
+    </aside>
+
+    <!-- grid de produtos -->
+    <div class="shop-main">
+      <div class="sort-bar">
+        <span id="results-count">10 produtos</span>
+        <select class="sort-select" onchange="sortProducts(this.value)" id="sort-select">
+          <option value="default">Ordenar por: Destaques</option>
+          <option value="priceAsc">Menor preço</option>
+          <option value="priceDesc">Maior preço</option>
+          <option value="name">Nome A–Z</option>
+        </select>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+    </div>
+
+    <!-- painel do carrinho -->
+    <div class="cart-panel hidden" id="cart-panel" aria-label="Carrinho">
+      <div class="cart-panel-header">
+        <h2>Carrinho</h2>
+        <button class="cart-close-btn" onclick="closeCart()" aria-label="Fechar">
+          <svg viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="cart-items" id="cart-items"></div>
+
+      <div class="cart-panel-footer" id="cart-panel-footer" style="display:none">
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <strong id="cart-total">R$ 0,00</strong>
+        </div>
+        <p class="cart-shipping-note">Frete calculado no checkout · Entrega até 5 dias úteis</p>
+        <button class="btn-checkout" onclick="checkout()">Finalizar compra</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- footer -->
+  <footer>
+    <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+  </footer>
+
+  <script src="js/produtos.js"></script>
+</body>
+
+</html>

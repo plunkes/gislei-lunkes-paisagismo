@@ -1,0 +1,422 @@
+body {
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  height: clamp(400px, 75vh, 1000px);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+#bg-video {
+  width: 100vw;
+  height: clamp(400px, 100vh, 1000px);
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  left: 40px;
+  bottom: 60px;
+  max-width: 520px;
+  background: rgba(66, 84, 70, 0.5);
+  backdrop-filter: blur(2px);
+  padding: 48px 56px;
+  border-radius: 2px;
+  animation: fadeUp 0.9s ease both;
+  animation-delay: 0.2s;
+}
+
+.hero-overlay h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--c-white);
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.hero-overlay p {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--c-white);
+  text-align: right;
+}
+
+.divider {
+  height: 6px;
+  background: var(--c-mint);
+  padding: 4px 0;
+}
+
+.quem-somos {
+  display: grid;
+  grid-template-columns: 28% 1fr;
+  min-height: 690px;
+}
+
+.quem-somos-img {
+  position: relative;
+  overflow: hidden;
+}
+
+.quem-somos-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quem-somos-content {
+  background: rgba(188, 210, 205, 0.37);
+  padding: 72px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quem-somos-content h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3vw, 44px);
+  font-weight: 300;
+  color: var(--c-text-sub);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.quem-somos-content .subtitle {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--c-text-sub);
+  text-align: center;
+  margin-bottom: 36px;
+  letter-spacing: 0.08em;
+}
+
+.quem-somos-content .bio {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--c-text);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.quem-somos-content .bio strong {
+  font-weight: 600;
+}
+
+.servicos {
+  background: var(--c-sage);
+  padding: 80px 60px 40px;
+}
+
+.servicos h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--c-white);
+  margin-bottom: 32px;
+}
+
+.servicos-desc {
+  background: rgba(66, 84, 70, 0.35);
+  border-radius: 4px;
+  padding: 36px 48px;
+  margin-bottom: 48px;
+}
+
+.servicos-desc p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--c-white);
+  opacity: 0.95;
+}
+
+.cards-section {
+  background: #B0B8AC;
+  padding: 48px 60px 64px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--c-pale);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeIn 0.6s ease both;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+.card:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.card:nth-child(4) {
+  animation-delay: 0.55s;
+}
+
+.card-img {
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.card:hover .card-img img {
+  transform: scale(1.05);
+}
+
+.card-body {
+  padding: 20px 24px 28px;
+}
+
+.card-body h3 {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--c-text);
+  margin-bottom: 6px;
+}
+
+.card-body p {
+  font-size: 13px;
+  color: var(--c-text-sub);
+  line-height: 1.5;
+}
+
+.contato {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  min-height: 500px;
+}
+
+.contato-info {
+  background: var(--c-forest);
+  padding: 60px 48px;
+  display: flex;
+  flex-direction: column;
+  color: var(--c-pale);
+}
+
+.contato-info h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.contato-info .info-item {
+  font-size: 18px;
+  line-height: 1.8;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.contato-social {
+  display: flex;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.contato-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.contato-social a:hover {
+  opacity: 1;
+}
+
+.contato-social svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--c-pale);
+}
+
+.contato-form-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.contato-form-bg {
+  position: absolute;
+  inset: 0;
+  background: url("../imgs/krystal-ng-jRp60R7ogNQ-unsplash.jpg") center/cover no-repeat;
+  opacity: 0.3;
+}
+
+.contato-form-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.contato-form-wrapper .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.contato-form-wrapper label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+  letter-spacing: 0.02em;
+}
+
+.contato-form-wrapper input,
+.contato-form-wrapper textarea {
+  background: var(--c-pale);
+  border: 1px solid rgba(40, 42, 39, 0.15);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--c-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.contato-form-wrapper input:focus,
+.contato-form-wrapper textarea:focus {
+  border-color: var(--c-mid);
+}
+
+.contato-form-wrapper textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-enviar {
+  margin-top: 12px;
+  width: 100%;
+  background: var(--c-mid);
+  color: var(--c-white);
+  border: none;
+  border-radius: 3px;
+  padding: 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-enviar:hover {
+  background: var(--c-forest);
+}
+
+.btn-enviar:hover {
+  background: var(--c-forest);
+}
+
+/*Animações*/
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/*Responsivo*/
+@media (max-width: 960px) {
+  .hero-overlay {
+    left: 16px;
+    right: 16px;
+    bottom: 24px;
+    padding: 28px 32px;
+  }
+
+  .quem-somos {
+    grid-template-columns: 1fr;
+  }
+
+  .quem-somos-img {
+    height: 350px;
+  }
+
+  .quem-somos-content {
+    padding: 48px 24px;
+  }
+
+  .servicos {
+    padding: 48px 24px;
+  }
+
+  .cards-section {
+    padding: 32px 24px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contato {
+    grid-template-columns: 1fr;
+  }
+
+  .contato-info {
+    padding: 40px 24px;
+  }
+
+  .contato-form-wrapper {
+    padding: 32px 24px;
+  }
+}
