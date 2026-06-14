@@ -15,6 +15,27 @@
 
 <body>
 
+  <!-- sidebar mobile -->
+  <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <nav class="mobile-sidebar" id="mobile-sidebar" aria-label="Menu de navegação">
+    <button class="sidebar-close" id="sidebar-close" aria-label="Fechar menu">&times;</button>
+    <a href="index.html">Início</a>
+    <a href="index.html#portfolio">Portfólio</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#contato">Contato</a>
+    <a href="produtos.html">Loja</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign In</a>
+    <div class="sidebar-social">
+      <a href="https://www.instagram.com/gi.lunkes/" title="Instagram"><img src="./icons/instagram.svg"></a>
+      <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn"><img src="./icons/linkedin.svg"></a>
+      <a href="mailto:gisleilv@gmail.com" title="Email"><img src="./icons/email.svg"></a>
+    </div>
+  </nav>
+
   <!-- header -->
   <header id="inicio">
     <div class="header-logo-area">
@@ -29,11 +50,11 @@
       <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn">
         <img src="./icons/linkedin.svg" width="22" height="22">
       </a>
-      <a href="gisleilv@gmail.com" title="Email">
+      <a href="mailto:gisleilv@gmail.com" title="Email">
         <img src="./icons/email.svg" width="22" height="22">
       </a>
     </div>
-    <nav class="header-nav">
+    <nav class="header-nav has-mobile">
       <a href="index.html">Início</a>
       <a href="index.html#contato">Contato</a>
       <div class="nav-tabs">
@@ -142,11 +163,74 @@
 
   </div>
 
+  <!-- modal de checkout -->
+  <div class="checkout-modal" id="checkout-modal" aria-label="Finalizar pedido">
+    <div class="checkout-card">
+      <button class="checkout-close" id="checkout-cancel" aria-label="Fechar">&times;</button>
+
+      <!-- etapa 1: confirmação dos dados (pré-preenchidos do usuário logado) -->
+      <div id="checkout-step-form">
+        <h2>Finalizar pedido</h2>
+        <p class="checkout-hint">Confira seus dados de contato. A entrega e o pagamento serão
+          combinados conforme a forma de venda da loja.</p>
+        <div class="co-alert" id="checkout-alert"></div>
+        <form id="checkout-form">
+          <div class="checkout-userbox" id="checkout-userbox">
+            <p><strong id="co-nome">—</strong></p>
+            <p id="co-email">—</p>
+            <p id="co-telefone">—</p>
+          </div>
+          <p class="checkout-summary" id="checkout-summary"></p>
+          <button type="submit" class="btn-checkout" id="checkout-submit">Ir para o pagamento</button>
+          <a class="checkout-editlink" href="minha-conta.html">Editar meus dados</a>
+        </form>
+      </div>
+
+      <!-- etapa 2: conclusão via Infinite Pay (QR Code PIX) -->
+      <div id="checkout-step-pix" style="display:none">
+        <h2>Pague com PIX</h2>
+        <p class="checkout-hint">Escaneie o QR Code abaixo no app do seu banco ou copie o código
+          PIX. Seu pedido foi registrado.</p>
+        <div class="pix-box">
+          <img id="pix-qr" class="pix-qr" alt="QR Code PIX" src="">
+          <p class="pix-amount" id="pix-amount"></p>
+          <div class="pix-code-row">
+            <input type="text" id="pix-code" readonly>
+            <button type="button" class="btn-copy" id="pix-copy">Copiar</button>
+          </div>
+          <p class="pix-demo-note">Modo demonstração: PIX simulado para exibição do fluxo.</p>
+        </div>
+        <button type="button" class="btn-checkout" id="pix-done">Concluir</button>
+      </div>
+    </div>
+  </div>
+
   <!-- footer -->
   <footer>
-    <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+    <nav class="footer-nav">
+      <a href="index.html">Início</a>
+      <a href="index.html#sobre">Quem Somos</a>
+      <a href="index.html#portfolio">Portfólio</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contato">Contato</a>
+      <a href="produtos.html">Loja</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign In</a>
+    </nav>
+    <div class="footer-bottom">
+      <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+    </div>
   </footer>
 
+  <!-- WhatsApp flutuante -->
+  <a class="whatsapp-float" data-whatsapp href="#" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-.973z"/>
+    </svg>
+  </a>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/produtos.js"></script>
 </body>
 

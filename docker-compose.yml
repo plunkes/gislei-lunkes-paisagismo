@@ -1,0 +1,72 @@
+# Orquestração dos serviços do projeto.
+#
+#   db        — PostgreSQL (banco de dados)
+#   app       — backend (Express) + frontend + backoffice (tudo integrado;
+#               o backoffice é servido pelo mesmo app em /backoffice)
+#   adminer   — GUI web opcional para inspecionar o banco (http://localhost:8080)
+#
+# Subir tudo:   docker compose up --build
+# Acessos:      site http://localhost:3000 · backoffice http://localhost:3000/backoffice/login.html
+#               docs http://localhost:3000/api/docs · adminer http://localhost:8080
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gislei_lunkes}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    # Host 5433 (evita conflito com outros Postgres locais na 5432). A rede
+    # interna do compose continua usando 5432 — o app conecta em db:5432.
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-gislei_lunkes}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      APP_URL: http://localhost:3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-gislei_lunkes}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_SSL: "false"
+      JWT_SECRET: ${JWT_SECRET:-troque-este-segredo-em-producao}
+      JWT_EXPIRES_IN: 7d
+      WHATSAPP_NUMBER: ${WHATSAPP_NUMBER:-5511987863324}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@gislei.com}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-changeme123}
+      SEED_ADMIN_NAME: Administrador
+      # Opcionais (deixe vazio para usar o modo demo de PIX):
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      INFINITEPAY_API_KEY: ${INFINITEPAY_API_KEY:-}
+      INFINITEPAY_HANDLE: ${INFINITEPAY_HANDLE:-}
+    ports:
+      - "3000:3000"
+    # Cria as tabelas e popula os dados iniciais antes de subir o servidor.
+    command: sh -c "npm run db:sync && npm run db:seed && npm start"
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

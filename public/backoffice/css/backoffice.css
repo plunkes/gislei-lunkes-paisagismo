@@ -1,0 +1,234 @@
+/* Backoffice — Gislei Lunkes Paisagismo
+   Reaproveita a paleta/typografia do site público (css/shared.css). */
+:root {
+  --c-dark: #1B2825;
+  --c-forest: #425446;
+  --c-mid: #52796F;
+  --c-sage: #84A98C;
+  --c-pale: #CAD2C5;
+  --c-cream: #F0F4EE;
+  --c-bg: #EEF2EC;
+  --c-white: #FFFFFF;
+  --c-text: #282A27;
+  --c-text-sub: #51544F;
+  --c-error: #c0392b;
+  --c-ok: #27ae60;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  color: var(--c-text);
+  background: var(--c-bg);
+  line-height: 1.5;
+}
+
+a { color: var(--c-mid); text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ---------- Login ---------- */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, var(--c-forest), var(--c-sage));
+}
+.login-card {
+  background: var(--c-white);
+  border-radius: 10px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+.login-card h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--c-forest);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.login-card .sub {
+  text-align: center;
+  color: var(--c-text-sub);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+/* ---------- Forms ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.field label { font-size: 13px; font-weight: 500; color: var(--c-text); }
+.field input, .field select, .field textarea {
+  border: 1px solid rgba(40, 42, 39, 0.18);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--c-text);
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--c-white);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--c-mid);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 18px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+.btn-primary { background: var(--c-mid); color: #fff; width: 100%; }
+.btn-primary:hover { background: var(--c-forest); }
+.btn-ghost { background: transparent; color: var(--c-text-sub); border: 1px solid var(--c-pale); }
+.btn-ghost:hover { background: var(--c-pale); }
+.btn-danger { background: var(--c-error); color: #fff; }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.alert {
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert.error { background: #fdecea; color: var(--c-error); display: block; }
+.alert.ok { background: #e8f8ee; color: var(--c-ok); display: block; }
+
+/* ---------- Dashboard shell ---------- */
+.topbar {
+  background: var(--c-forest);
+  color: var(--c-cream);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar h1 { font-family: var(--serif); font-weight: 500; font-size: 22px; }
+.topbar .who { font-size: 13px; opacity: 0.85; display: flex; gap: 14px; align-items: center; }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 28px;
+  background: var(--c-pale);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.tab {
+  border: none;
+  background: transparent;
+  padding: 14px 18px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-text-sub);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+.tab.active { color: var(--c-forest); border-bottom-color: var(--c-mid); }
+
+.panel { padding: 28px; max-width: 1100px; margin: 0 auto; display: none; }
+.panel.active { display: block; }
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.panel-head h2 { font-family: var(--serif); font-weight: 500; font-size: 24px; color: var(--c-forest); }
+
+/* ---------- Table ---------- */
+.table-wrap { overflow-x: auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--c-bg); }
+th { background: var(--c-cream); font-weight: 600; color: var(--c-text-sub); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+tr:last-child td { border-bottom: none; }
+.thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; background: var(--c-pale); }
+.row-actions { display: flex; gap: 6px; }
+
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+.pill.disponivel, .pill.pago, .pill.concluido { background: #e8f8ee; color: var(--c-ok); }
+.pill.encomenda, .pill.pendente { background: #fef6e6; color: #b9770e; }
+.pill.cancelado { background: #fdecea; color: var(--c-error); }
+.pill.inativo { background: #eee; color: #888; }
+
+/* ---------- Toggle (modo de venda) ---------- */
+.config-card { background: #fff; border-radius: 10px; padding: 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 560px; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--c-bg); }
+.switch-row:last-child { border-bottom: none; }
+.switch-label strong { display: block; font-size: 15px; }
+.switch-label span { font-size: 13px; color: var(--c-text-sub); }
+
+.switch { position: relative; width: 52px; height: 28px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: #c4c4c4; border-radius: 999px; transition: background 0.2s;
+}
+.slider::before {
+  content: ''; position: absolute; height: 22px; width: 22px; left: 3px; top: 3px;
+  background: #fff; border-radius: 50%; transition: transform 0.2s;
+}
+.switch input:checked + .slider { background: var(--c-mid); }
+.switch input:checked + .slider::before { transform: translateX(24px); }
+
+.mode-banner { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
+.mode-banner.on { background: #e8f8ee; color: var(--c-ok); }
+.mode-banner.off { background: #fef6e6; color: #b9770e; }
+
+/* ---------- Modal ---------- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(27, 40, 37, 0.55);
+  display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 12px; padding: 28px;
+  width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+}
+.modal h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; color: var(--c-forest); margin-bottom: 18px; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.modal-grid .full { grid-column: 1 / -1; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+
+.empty { text-align: center; padding: 48px 0; color: var(--c-text-sub); }
+.loading { text-align: center; padding: 40px 0; color: var(--c-text-sub); }
+
+/* Toasts (substituem alert()) */
+.toast-container {
+  position: fixed; top: 20px; right: 20px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 10px; max-width: 340px;
+}
+.toast {
+  background: var(--c-dark); color: #fff; padding: 13px 18px; border-radius: 10px;
+  font-size: 14px; box-shadow: 0 8px 26px rgba(0,0,0,0.25);
+  opacity: 0; transform: translateX(40px); transition: opacity .25s, transform .25s;
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.error { background: #b33024; }
+.toast.success { background: #2f8f53; }
+
+@media (max-width: 640px) {
+  .modal-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 12px 16px; }
+  .tabs, .panel { padding-left: 14px; padding-right: 14px; }
+}

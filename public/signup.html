@@ -30,7 +30,7 @@
       <a href="https://www.linkedin.com/in/gisleilunkes/" title="LinkedIn">
         <img src="./icons/linkedin.svg" width="22" height="22">
       </a>
-      <a href="gisleilv@gmail.com" title="Email">
+      <a href="mailto:gisleilv@gmail.com" title="Email">
         <img src="./icons/email.svg" width="22" height="22">
       </a>
     </div>
@@ -67,11 +67,11 @@
             <span class="field-error" id="err-email">E-mail inválido.</span>
           </div>
           <div class="form-field">
-            <label for="su-usuario">Usuário</label>
-            <input type="text" id="su-usuario" placeholder="Nome de usuário único" autocomplete="username" required
-              minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+">
-            <span class="field-hint">Somente letras, números e _ (mín. 3 caracteres)</span>
-            <span class="field-error" id="err-usuario">Usuário inválido (min. 3 caracteres, sem espaços).</span>
+            <label for="su-telefone">WhatsApp</label>
+            <input type="tel" id="su-telefone" placeholder="(11) 90000-0000" autocomplete="tel"
+              data-phone-mask required>
+            <span class="field-hint">Obrigatório para finalizar compras (com DDD)</span>
+            <span class="field-error" id="err-telefone">Informe um WhatsApp válido (com DDD).</span>
           </div>
           <div class="form-field">
             <label for="su-senha">Senha</label>
@@ -116,8 +116,9 @@
     <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
   </footer>
 
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/signup.js"></script>
-  <script src="js/shared.js"></script>
 </body>
 
 </html>

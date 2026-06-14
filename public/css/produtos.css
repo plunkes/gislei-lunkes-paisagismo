@@ -326,6 +326,13 @@ body {
   gap: 8px;
 }
 
+/* Coluna de preços: preço atual em cima, preço antigo (desconto) logo abaixo. */
+.product-footer > div {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
 .product-price {
   font-family: var(--serif);
   font-size: 19px;
@@ -334,10 +341,11 @@ body {
 }
 
 .product-price-old {
+  display: block;
   font-size: 11px;
   color: var(--c-text-sub);
   text-decoration: line-through;
-  margin-left: 4px;
+  margin-left: 0;
 }
 
 .btn-add-cart {
@@ -639,6 +647,201 @@ body {
 
 .btn-checkout:active {
   transform: scale(0.98);
+}
+
+/* Botão em modo WhatsApp (e-commerce desativado) */
+.btn-checkout.whatsapp-mode {
+  background: #25d366;
+}
+
+.btn-checkout.whatsapp-mode:hover {
+  background: #1da851;
+}
+
+/* ---------- Modal de checkout ---------- */
+.checkout-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 40, 37, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  /* Acima da barra fixa do carrinho (z-index 200) para cobri-la no checkout. */
+  z-index: 300;
+  padding: 20px;
+}
+
+.checkout-modal.open {
+  display: flex;
+}
+
+.checkout-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 30px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.checkout-card h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 26px;
+  color: var(--c-forest);
+  margin-bottom: 6px;
+}
+
+.checkout-hint {
+  font-size: 13px;
+  color: var(--c-text-sub);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.checkout-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--c-text-sub);
+  cursor: pointer;
+}
+
+.checkout-card .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.checkout-card .form-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+}
+
+.checkout-card .form-field input {
+  border: 1px solid rgba(40, 42, 39, 0.18);
+  border-radius: 8px;
+  padding: 11px 13px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--c-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.checkout-card .form-field input:focus {
+  border-color: var(--c-mid);
+}
+
+.co-alert {
+  display: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.co-alert.error {
+  display: block;
+  background: #fdecea;
+  color: var(--c-error, #c0392b);
+}
+
+/* Dados do usuário logado no checkout (pré-preenchidos) */
+.checkout-userbox {
+  background: var(--c-cream, #f0f4ee);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.checkout-userbox strong {
+  font-size: 15px;
+  color: var(--c-text, #282a27);
+}
+
+.checkout-userbox p {
+  font-size: 13px;
+  color: var(--c-text-sub, #51544f);
+  margin: 2px 0;
+}
+
+.checkout-summary {
+  font-size: 14px;
+  color: var(--c-forest, #425446);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.checkout-editlink {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: var(--c-mid, #52796f);
+  margin-top: 12px;
+}
+
+/* Etapa PIX (conclusão Infinite Pay) */
+.pix-box {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.pix-qr {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 12px;
+  border: 1px solid var(--c-pale, #cad2c5);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.pix-amount {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--c-forest, #425446);
+  margin-bottom: 12px;
+}
+
+.pix-code-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pix-code-row input {
+  flex: 1;
+  border: 1px solid rgba(40, 42, 39, 0.18);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--c-text-sub, #51544f);
+  font-family: monospace;
+}
+
+.btn-copy {
+  border: none;
+  border-radius: 8px;
+  background: var(--c-mid, #52796f);
+  color: #fff;
+  padding: 0 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pix-demo-note {
+  font-size: 11px;
+  color: var(--c-text-sub, #51544f);
+  margin-top: 10px;
+  font-style: italic;
 }
 
 footer {

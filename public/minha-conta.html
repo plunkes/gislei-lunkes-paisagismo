@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Conta — Gislei Lunkes Paisagismo</title>
+  <meta name="description" content="Gerencie sua conta, pedidos e dados na Gislei Lunkes Paisagismo.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/conta.css">
+</head>
+
+<body>
+
+  <!-- sidebar mobile -->
+  <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <nav class="mobile-sidebar" id="mobile-sidebar" aria-label="Menu de navegação">
+    <button class="sidebar-close" id="sidebar-close" aria-label="Fechar menu">&times;</button>
+    <a href="index.html">Início</a>
+    <a href="produtos.html">Loja</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#contato">Contato</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign In</a>
+  </nav>
+
+  <!-- header -->
+  <header id="inicio">
+    <div class="header-logo-area">
+      <div class="header-logo">
+        <a href="index.html"><img src="./icons/gi_lunkes.svg"></a>
+      </div>
+    </div>
+    <div class="header-social">
+      <a href="https://www.instagram.com/gi.lunkes/" title="Instagram">
+        <img src="./icons/instagram.svg" width="22" height="22">
+      </a>
+      <a href="mailto:gisleilv@gmail.com" title="Email">
+        <img src="./icons/email.svg" width="22" height="22">
+      </a>
+    </div>
+    <nav class="header-nav has-mobile">
+      <a href="index.html">Início</a>
+      <a href="index.html#contato">Contato</a>
+      <div class="nav-tabs">
+        <a href="produtos.html" class="nav-btn">Produtos</a>
+        <a href="login.html" class="nav-btn">Login</a>
+        <a href="signup.html" class="nav-btn">Sign In</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="conta-wrap">
+    <h1>Minha Conta</h1>
+    <p class="conta-greeting" id="conta-greeting">Carregando…</p>
+
+    <div class="conta-grid">
+      <!-- dados cadastrais -->
+      <section class="conta-card">
+        <h2>Dados cadastrais</h2>
+        <div class="auth-msg" id="profile-msg"></div>
+        <form id="profile-form">
+          <div class="form-field">
+            <label for="acc-nome">Nome</label>
+            <input type="text" id="acc-nome" required>
+          </div>
+          <div class="form-field">
+            <label for="acc-email">Email</label>
+            <input type="email" id="acc-email" disabled>
+            <span class="field-hint">O e-mail não pode ser alterado.</span>
+          </div>
+          <div class="form-field">
+            <label for="acc-telefone">WhatsApp</label>
+            <input type="tel" id="acc-telefone" data-phone-mask required>
+          </div>
+          <div class="form-field">
+            <label for="acc-senha">Nova senha (opcional)</label>
+            <input type="password" id="acc-senha" placeholder="Deixe em branco para manter"
+              autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn-conta" id="btn-save-profile">Salvar alterações</button>
+        </form>
+
+        <div class="danger-zone">
+          <h3>Excluir conta</h3>
+          <p>Esta ação é permanente. Seus dados pessoais serão removidos.</p>
+          <button type="button" class="btn-danger" id="btn-delete-toggle">Excluir minha conta</button>
+          <div class="delete-confirm" id="delete-confirm" style="display:none">
+            <p>Tem certeza? Esta ação não pode ser desfeita.</p>
+            <div class="delete-actions">
+              <button type="button" class="btn-ghost" id="btn-delete-cancel">Cancelar</button>
+              <button type="button" class="btn-danger" id="btn-delete-confirm">Sim, excluir</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- histórico de pedidos -->
+      <section class="conta-card">
+        <h2>Histórico de pedidos</h2>
+        <div id="orders-list">
+          <p class="conta-loading">Carregando pedidos…</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <nav class="footer-nav">
+      <a href="index.html">Início</a>
+      <a href="produtos.html">Loja</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <div class="footer-bottom">
+      <p>© 2025 Gislei Lunkes Paisagismo · Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/minha-conta.js"></script>
+</body>
+
+</html>
