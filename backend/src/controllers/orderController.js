@@ -10,8 +10,11 @@ const ORDER_STATUSES = [
 /** Valida formato de UUID v4 (PK dos produtos). */
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** UF brasileira: duas letras. */
-const UF_RE = /^[A-Za-z]{2}$/;
+/** UFs válidas do Brasil (26 estados + Distrito Federal). */
+const BR_UFS = new Set([
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+  'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+]);
 
 /**
  * Valida e normaliza o endereço de entrega enviado no checkout. Lança 400 se
@@ -39,8 +42,8 @@ function validateShipping(shipping) {
   if (!street || !number || !district || !city) {
     throw new ApiError(400, 'Preencha o endereço de entrega completo (rua, número, bairro e cidade).');
   }
-  if (!UF_RE.test(state)) {
-    throw new ApiError(400, 'Informe a UF (2 letras).');
+  if (!BR_UFS.has(state)) {
+    throw new ApiError(400, 'UF inválida. Use a sigla de um estado brasileiro (ex.: SP).');
   }
 
   return {

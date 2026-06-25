@@ -534,10 +534,16 @@ function closeCheckout() {
   document.getElementById('checkout-modal')?.classList.remove('open');
 }
 
+/** UFs válidas do Brasil (26 estados + Distrito Federal). */
+const BR_UFS = new Set([
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+  'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+]);
+
 /**
  * Lê e valida o endereço de entrega do formulário. Retorna o objeto pronto para
- * o backend, ou `null` se algum campo obrigatório estiver vazio (marca os campos
- * inválidos para feedback visual).
+ * o backend, ou `null` se algum campo obrigatório estiver vazio/ inválido (marca
+ * os campos inválidos para feedback visual).
  * @returns {object|null}
  */
 function readShipping() {
@@ -561,6 +567,11 @@ function readShipping() {
   const cepDigits = fields.cep.value.replace(/\D/g, '');
   if (cepDigits.length !== 8) {
     fields.cep.classList.add('co-invalid');
+    ok = false;
+  }
+  // UF deve ser uma das 27 siglas válidas do Brasil (26 estados + DF).
+  if (!BR_UFS.has(fields.state.value.trim().toUpperCase())) {
+    fields.state.classList.add('co-invalid');
     ok = false;
   }
   if (!ok) return null;

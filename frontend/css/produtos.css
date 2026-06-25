@@ -682,7 +682,7 @@ body {
   border-radius: 16px;
   padding: 36px 36px;
   width: 100%;
-  max-width: 620px;
+  max-width: 680px;
   max-height: 92vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
@@ -807,8 +807,13 @@ body {
 }
 
 .co-address-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.co-row {
+  display: flex;
   gap: 14px;
 }
 
@@ -816,7 +821,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-bottom: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .co-field label {
@@ -831,6 +837,9 @@ body {
 }
 
 .co-field input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid rgba(40, 42, 39, 0.18);
   border-radius: 9px;
   padding: 13px 14px;
@@ -851,19 +860,25 @@ body {
   background: #fdecea;
 }
 
-.co-cep { grid-column: span 2; }
-.co-street { grid-column: span 4; }
-.co-number { grid-column: span 2; }
-.co-complement { grid-column: span 4; }
-.co-district { grid-column: span 2; }
-.co-city { grid-column: span 3; }
-.co-state { grid-column: span 1; }
+/* Larguras fixas no tamanho do conteúdo; o resto da linha é flexível.
+   CEP cabe "00000-000"; Número ~4 dígitos; UF 2 letras. */
+.co-cep { flex: 0 0 130px; }
+.co-street { flex: 1 1 auto; }
+.co-number { flex: 0 0 92px; }
+.co-complement { flex: 1 1 auto; }
+.co-state { flex: 0 0 72px; }
+.co-city { flex: 1 1 auto; }
+.co-district { flex: 1 1 auto; }
+
+/* Mobile: empilha cada campo em largura total. */
+@media (max-width: 560px) {
+  .checkout-card { padding: 24px 20px; }
+  .checkout-card h2 { font-size: 23px; }
+}
 
 @media (max-width: 480px) {
-  .co-address-grid { grid-template-columns: repeat(2, 1fr); }
-  .co-cep, .co-street, .co-number, .co-complement, .co-district, .co-city, .co-state {
-    grid-column: span 2;
-  }
+  .co-row { flex-direction: column; gap: 14px; }
+  .co-cep, .co-number, .co-state { flex: 0 0 auto; }
 }
 
 /* Etapa PIX (conclusão Infinite Pay) */
