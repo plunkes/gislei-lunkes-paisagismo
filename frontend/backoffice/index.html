@@ -149,8 +149,12 @@
             </select>
           </div>
           <div class="field full">
-            <label for="p-img">URL da imagem</label>
-            <input type="text" id="p-img" placeholder="https://…">
+            <label for="p-img-file">Imagem do produto</label>
+            <input type="file" id="p-img-file" accept="image/*">
+            <small id="p-img-status" class="upload-status"></small>
+            <input type="text" id="p-img" placeholder="https://… ou faça upload acima">
+            <img id="p-img-preview" alt="" hidden
+              style="max-height:120px;margin-top:8px;border-radius:8px;object-fit:cover">
           </div>
           <div class="field full">
             <label style="flex-direction:row;display:flex;gap:8px;align-items:center">

@@ -56,6 +56,47 @@ function setupTabs() {
 const productModal = document.getElementById('product-modal');
 const productForm = document.getElementById('product-form');
 const modalAlert = document.getElementById('modal-alert');
+const imgFileInput = document.getElementById('p-img-file');
+const imgUrlInput = document.getElementById('p-img');
+const imgStatus = document.getElementById('p-img-status');
+const imgPreview = document.getElementById('p-img-preview');
+
+/** Mostra/esconde o preview da imagem conforme a URL atual. */
+function updateImagePreview() {
+  const url = imgUrlInput.value.trim();
+  if (url) {
+    imgPreview.src = url;
+    imgPreview.hidden = false;
+  } else {
+    imgPreview.removeAttribute('src');
+    imgPreview.hidden = true;
+  }
+}
+
+/**
+ * Faz upload do arquivo escolhido para o backend e preenche o campo de URL
+ * com o caminho retornado. Usa FormData nativo + helper `apiUpload`.
+ */
+async function handleImageUpload() {
+  const file = imgFileInput.files[0];
+  if (!file) return;
+  imgStatus.textContent = 'Enviando imagem…';
+  imgStatus.className = 'upload-status';
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    const { url } = await apiUpload('/backoffice/uploads', formData);
+    imgUrlInput.value = url;
+    updateImagePreview();
+    imgStatus.textContent = 'Imagem enviada com sucesso.';
+    imgStatus.className = 'upload-status ok';
+  } catch (err) {
+    imgStatus.textContent = err.message;
+    imgStatus.className = 'upload-status error';
+  } finally {
+    imgFileInput.value = ''; // permite reenviar o mesmo arquivo.
+  }
+}
 
 /** Carrega e renderiza a tabela de produtos. */
 async function loadProducts() {
@@ -123,6 +164,10 @@ function openProductModal(p) {
   document.getElementById('p-stock').value = p?.stockStatus || 'disponivel';
   document.getElementById('p-img').value = p?.imageUrl || '';
   document.getElementById('p-active').checked = p ? p.active : true;
+  imgFileInput.value = '';
+  imgStatus.textContent = '';
+  imgStatus.className = 'upload-status';
+  updateImagePreview();
   productModal.classList.add('open');
 }
 
@@ -291,6 +336,8 @@ async function init() {
   // Produtos
   document.getElementById('btn-new-product').addEventListener('click', () => openProductModal());
   document.getElementById('btn-cancel-product').addEventListener('click', closeProductModal);
+  imgFileInput.addEventListener('change', handleImageUpload);
+  imgUrlInput.addEventListener('input', updateImagePreview);
   productForm.addEventListener('submit', saveProduct);
   productModal.addEventListener('click', (e) => {
     if (e.target === productModal) closeProductModal();

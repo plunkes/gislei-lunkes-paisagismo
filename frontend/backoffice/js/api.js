@@ -88,6 +88,38 @@ async function api(path, options = {}) {
 }
 
 /**
+ * Faz upload de um arquivo via multipart/form-data. NÃO define Content-Type —
+ * o navegador adiciona o boundary correto automaticamente. Injeta o Bearer
+ * token e trata 401 como o {@link api}.
+ *
+ * @param {string} path - Caminho relativo à API, ex.: '/backoffice/uploads'.
+ * @param {FormData} formData - Corpo multipart (ex.: campo `image`).
+ * @returns {Promise<any>} Corpo JSON da resposta.
+ * @throws {Error} Mensagem de erro vinda do backend.
+ */
+async function apiUpload(path, formData) {
+  const headers = {};
+  const token = getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const res = await fetch(`/api${path}`, { method: 'POST', headers, body: formData });
+
+  if (res.status === 401) {
+    clearToken();
+    goToLogin();
+    throw new Error('Sessão expirada.');
+  }
+
+  const isJson = res.headers.get('content-type')?.includes('application/json');
+  const body = isJson ? await res.json() : null;
+
+  if (!res.ok) {
+    throw new Error((body && body.error) || `Erro ${res.status}`);
+  }
+  return body;
+}
+
+/**
  * Guard de página: chama no topo de páginas protegidas. Redireciona ao login
  * se não houver token válido. Retorna os dados do funcionário autenticado.
  * @returns {Promise<object|undefined>}

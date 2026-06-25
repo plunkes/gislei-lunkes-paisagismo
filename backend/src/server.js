@@ -18,7 +18,11 @@ const { trackPageviews } = require('./middlewares/analytics');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
-const PUBLIC_DIR = path.join(__dirname, '..', 'public');
+// Layout do repositório: backend/ e frontend/ são irmãos na raiz. A partir de
+// backend/src sobe dois níveis até a raiz; os uploads ficam em backend/uploads.
+const ROOT_DIR = path.join(__dirname, '..', '..');
+const PUBLIC_DIR = path.join(ROOT_DIR, 'frontend');
+const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 
 // --- Segurança / parsing -------------------------------------------------
 // CSP desligado: o frontend estático usa scripts inline (onclick), fontes do
@@ -50,8 +54,13 @@ app.use(trackPageviews);
 // Termos de Uso / Política de Privacidade (arquivo na raiz do repositório).
 app.get('/TERMOS_DE_USO.md', (_req, res) => {
   res.type('text/markdown; charset=utf-8');
-  res.sendFile(path.join(__dirname, '..', 'TERMOS_DE_USO.md'));
+  res.sendFile(path.join(ROOT_DIR, 'TERMOS_DE_USO.md'));
 });
+
+// --- Uploads do backoffice (imagens de produto) ---------------------------
+// Servidos estaticamente em /uploads/<arquivo>. A URL retornada pela rota de
+// upload é relativa, então funciona em qualquer host.
+app.use('/uploads', express.static(UPLOADS_DIR));
 
 // --- Frontend estático ----------------------------------------------------
 app.use(express.static(PUBLIC_DIR));

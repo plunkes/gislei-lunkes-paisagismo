@@ -6,3 +6,7 @@ npm-debug.log*
 .DS_Store
 coverage/
 dist/
+
+# Imagens enviadas pelo backoffice (geradas em runtime)
+backend/uploads/*
+!backend/uploads/.gitkeep

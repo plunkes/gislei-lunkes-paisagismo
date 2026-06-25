@@ -6,8 +6,10 @@ const productCtrl = require('../controllers/productController');
 const orderCtrl = require('../controllers/orderController');
 const configCtrl = require('../controllers/configController');
 const analyticsCtrl = require('../controllers/analyticsController');
+const uploadCtrl = require('../controllers/uploadController');
 const asyncHandler = require('../utils/asyncHandler');
 const { employeeRequired, requireRole } = require('../middlewares/auth');
+const { uploadSingleImage } = require('../middlewares/upload');
 const { authLimiter } = require('../middlewares/rateLimit');
 
 const router = Router();
@@ -29,6 +31,14 @@ router.get('/products', employeeRequired, asyncHandler(productCtrl.listAll));
 router.post('/products', employeeRequired, asyncHandler(productCtrl.create));
 router.put('/products/:id', employeeRequired, asyncHandler(productCtrl.update));
 router.delete('/products/:id', employeeRequired, asyncHandler(productCtrl.remove));
+
+// --- Upload de imagens (qualquer funcionário) ---
+router.post(
+  '/uploads',
+  employeeRequired,
+  uploadSingleImage,
+  asyncHandler(uploadCtrl.uploadImage)
+);
 
 // --- Pedidos (qualquer funcionário) ---
 router.get('/orders', employeeRequired, asyncHandler(orderCtrl.list));
