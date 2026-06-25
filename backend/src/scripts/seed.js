@@ -10,7 +10,8 @@
  * Idempotente: usa findOrCreate, pode rodar várias vezes. Execute após o
  * `npm run db:sync`:  `npm run db:seed`
  */
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
 const bcrypt = require('bcryptjs');
 const { sequelize, Employee, Product, SiteConfig } = require('../models');

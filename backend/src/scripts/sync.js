@@ -9,7 +9,8 @@
  *
  * Requires a reachable PostgreSQL instance configured via `.env`.
  */
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
 const { sequelize, SiteConfig } = require('../models');
 const waitForDb = require('../config/waitForDb');

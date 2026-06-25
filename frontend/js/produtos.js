@@ -72,7 +72,27 @@ async function loadProducts() {
   } catch {
     /* offline: mantém FALLBACK_PRODUCTS */
   }
+  setupPriceFilter();
   applyFilters();
+}
+
+/**
+ * Ajusta o filtro de preço ao catálogo: o teto (e o valor inicial do slider)
+ * passa a ser o preço do produto mais caro, arredondado para cima.
+ * @returns {void}
+ */
+function setupPriceFilter() {
+  priceCeil = PRODUCTS.length
+    ? Math.ceil(Math.max(...PRODUCTS.map((p) => p.price)))
+    : 500;
+  maxPrice = priceCeil;
+  const range = document.getElementById('price-range');
+  if (range) {
+    range.max = priceCeil;
+    range.value = priceCeil;
+  }
+  const label = document.getElementById('price-label');
+  if (label) label.textContent = `R$ ${priceCeil}`;
 }
 
 
@@ -83,10 +103,17 @@ async function loadProducts() {
  */
 let cart = JSON.parse(localStorage.getItem('cart_local') || '[]');
 /**
- * Upper price bound (BRL) used by the filter.
+ * Upper price bound (BRL) used by the filter. Atualizado dinamicamente para o
+ * preço do produto mais caro em {@link setupPriceFilter}.
  * @type {number}
  */
 let maxPrice = 500;
+/**
+ * Teto de preço do catálogo (preço do produto mais caro). Define o `max` do
+ * slider e o valor de reset dos filtros.
+ * @type {number}
+ */
+let priceCeil = 500;
 /**
  * Active sort mode: default|priceAsc|priceDesc|name.
  * @type {string}
@@ -315,9 +342,9 @@ function resetFilters() {
   document.querySelectorAll('.filter-option input').forEach(el => {
     el.checked = el.value !== 'encomenda';
   });
-  maxPrice = 500;
-  document.getElementById('price-range').value = 500;
-  document.getElementById('price-label').textContent = 'R$ 500';
+  maxPrice = priceCeil;
+  document.getElementById('price-range').value = priceCeil;
+  document.getElementById('price-label').textContent = `R$ ${priceCeil}`;
   sortMode = 'default';
   document.getElementById('sort-select').value = 'default';
   applyFilters();
@@ -354,7 +381,7 @@ function renderProducts(list) {
   }
 
   grid.innerHTML = list.map((p, idx) => `
-    <div class="product-card" style="animation-delay:${idx * 0.05}s">
+    <div class="product-card" style="animation-delay:${idx * 0.05}s" onclick="openProductPopup('${p.id}')">
       <div class="product-img-wrap">
         <img src="${p.img}" alt="${p.name}" loading="lazy">
         ${p.badge ? `<span class="product-badge ${p.badge}">${p.badge === 'novo' ? 'Novo' : 'Oferta'}</span>` : ''}
@@ -368,13 +395,55 @@ function renderProducts(list) {
             <span class="product-price">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
             ${p.oldPrice ? `<span class="product-price-old">R$ ${p.oldPrice.toFixed(2).replace('.', ',')}</span>` : ''}
           </div>
-          <button class="btn-add-cart" onclick="addToCart('${p.id}')" id="add-${p.id}">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart('${p.id}')" id="add-${p.id}">
+            <svg viewBox="0 0 24 24"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
             Adicionar
           </button>
         </div>
       </div>
     </div>`).join('');
+}
+
+// ---------------------------------------------------------------------------
+// Popup de detalhe do produto (imagem ampliada + descrição)
+// ---------------------------------------------------------------------------
+
+/**
+ * Abre o popup com a imagem ampliada e a descrição do produto. Registra a
+ * abertura como um "clique no produto" para as métricas.
+ * @param {string} id - Id do produto.
+ * @returns {void}
+ */
+function openProductPopup(id) {
+  const p = PRODUCTS.find((x) => x.id === id);
+  if (!p) return;
+
+  document.getElementById('pm-img').src = p.img;
+  document.getElementById('pm-img').alt = p.name;
+  document.getElementById('pm-category').textContent = categoryLabel(p.category);
+  document.getElementById('pm-name').textContent = p.name;
+  document.getElementById('pm-desc').textContent = p.desc;
+  document.getElementById('pm-price').textContent =
+    'R$ ' + p.price.toFixed(2).replace('.', ',');
+  const oldEl = document.getElementById('pm-oldprice');
+  if (p.oldPrice) {
+    oldEl.textContent = 'R$ ' + p.oldPrice.toFixed(2).replace('.', ',');
+    oldEl.style.display = '';
+  } else {
+    oldEl.style.display = 'none';
+  }
+  // Botão de adicionar guarda o id atual.
+  document.getElementById('pm-add').dataset.id = id;
+
+  document.getElementById('product-popup').classList.add('open');
+
+  // Métrica: abrir o popup conta como clique no produto.
+  if (typeof window.trackEvent === 'function') window.trackEvent('product_click', id);
+}
+
+/** Fecha o popup de detalhe do produto. */
+function closeProductPopup() {
+  document.getElementById('product-popup')?.classList.remove('open');
 }
 
 // ---------------------------------------------------------------------------
@@ -550,4 +619,14 @@ document.getElementById('pix-copy')?.addEventListener('click', () => {
 });
 document.getElementById('checkout-modal')?.addEventListener('click', (e) => {
   if (e.target.id === 'checkout-modal') closeCheckout();
+});
+
+// Popup de produto: fechar (X), clique fora, e adicionar ao carrinho.
+document.getElementById('product-popup-close')?.addEventListener('click', closeProductPopup);
+document.getElementById('product-popup')?.addEventListener('click', (e) => {
+  if (e.target.id === 'product-popup') closeProductPopup();
+});
+document.getElementById('pm-add')?.addEventListener('click', (e) => {
+  addToCart(e.currentTarget.dataset.id);
+  closeProductPopup();
 });

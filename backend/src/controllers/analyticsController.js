@@ -59,8 +59,18 @@ async function summary(_req, res) {
     limit: 20,
     raw: true,
   });
+  // Produtos mais adicionados ao carrinho (o frontend emite add_to_cart com o
+  // id do produto em refId).
+  const topCart = await Analytics.findAll({
+    attributes: ['refId', [fn('SUM', col('count')), 'total']],
+    where: { eventType: 'add_to_cart' },
+    group: ['refId'],
+    order: [[fn('SUM', col('count')), 'DESC']],
+    limit: 20,
+    raw: true,
+  });
 
-  res.json({ byType, byPath, topProducts });
+  res.json({ byType, byPath, topProducts, topCart });
 }
 
 module.exports = { track, summary };

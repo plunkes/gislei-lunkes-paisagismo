@@ -319,6 +319,106 @@ async function saveConfig() {
 }
 
 // ---------------------------------------------------------------------------
+// Métricas / estatísticas (dashboard)
+// ---------------------------------------------------------------------------
+
+/** Rótulos amigáveis por tipo de evento. Define também a ordem dos cards. */
+const EVENT_LABELS = {
+  pageview: 'Visitas a páginas',
+  add_to_cart: 'Adições ao carrinho',
+  product_click: 'Cliques em produtos',
+  checkout_start: 'Checkouts iniciados',
+};
+
+/**
+ * Páginas exibidas no gráfico de visitas, com nomes amigáveis. Apenas estes
+ * caminhos aparecem — rotas internas/técnicas (backoffice, termos, etc.) ficam
+ * de fora para o painel ser claro a quem não é dev.
+ */
+const PAGE_LABELS = {
+  '/index.html': 'Página inicial',
+  '/produtos.html': 'Produtos',
+  '/signup.html': 'Criar conta',
+  '/login.html': 'Entrar (login)',
+  '/minha-conta.html': 'Minha conta',
+};
+
+/**
+ * Renderiza uma lista de barras horizontais proporcionais ao maior valor.
+ * @param {HTMLElement} container
+ * @param {Array<{label: string, total: number}>} rows
+ */
+function renderBars(container, rows) {
+  if (!rows.length) {
+    container.innerHTML = '<p class="empty" style="padding:24px 0">Sem dados ainda.</p>';
+    return;
+  }
+  const max = Math.max(...rows.map((r) => r.total)) || 1;
+  container.innerHTML = rows
+    .map((r) => {
+      const pct = Math.round((r.total / max) * 100);
+      return `
+      <div class="bar-row">
+        <div class="bar-head">
+          <span class="bar-name" title="${esc(r.label)}">${esc(r.label)}</span>
+          <span class="bar-count">${r.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    })
+    .join('');
+}
+
+/**
+ * Carrega o resumo de métricas do backend e desenha cards + listas de barras.
+ * Mapeia ids de produto (refId) para nomes usando o catálogo do backoffice.
+ */
+async function loadAnalytics() {
+  const alert = document.getElementById('metrics-alert');
+  alert.className = 'alert';
+  try {
+    const [{ byType, byPath, topCart }, { products }] = await Promise.all([
+      api('/backoffice/analytics'),
+      api('/backoffice/products'),
+    ]);
+
+    const nameById = Object.fromEntries((products || []).map((p) => [String(p.id), p.name]));
+
+    // Cards por tipo de evento (na ordem de EVENT_LABELS, 0 quando ausente).
+    const totals = Object.fromEntries(byType.map((r) => [r.eventType, Number(r.total)]));
+    document.getElementById('stat-cards').innerHTML = Object.entries(EVENT_LABELS)
+      .map(
+        ([type, label]) => `
+      <div class="stat-card">
+        <div class="stat-value">${totals[type] || 0}</div>
+        <div class="stat-label">${label}</div>
+      </div>`
+      )
+      .join('');
+
+    // Páginas mais vistas — apenas as páginas públicas relevantes, com nomes
+    // amigáveis (ordenadas pela contagem).
+    const pageRows = byPath
+      .filter((r) => PAGE_LABELS[r.path])
+      .map((r) => ({ label: PAGE_LABELS[r.path], total: Number(r.total) }))
+      .sort((a, b) => b.total - a.total);
+    renderBars(document.getElementById('metrics-pages'), pageRows);
+
+    // Produtos mais adicionados ao carrinho (id → nome).
+    renderBars(
+      document.getElementById('metrics-cart'),
+      topCart.map((r) => ({
+        label: nameById[String(r.refId)] || `Produto #${r.refId}`,
+        total: Number(r.total),
+      }))
+    );
+  } catch (err) {
+    alert.textContent = err.message;
+    alert.className = 'alert error';
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------------------
 async function init() {
@@ -346,10 +446,14 @@ async function init() {
   // Config
   document.getElementById('btn-save-config').addEventListener('click', saveConfig);
 
+  // Métricas
+  document.getElementById('btn-reload-metrics').addEventListener('click', loadAnalytics);
+
   // Carrega dados
   loadProducts();
   loadOrders();
   loadConfig();
+  loadAnalytics();
 }
 
 init();

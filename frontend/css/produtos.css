@@ -227,6 +227,7 @@ body {
   display: flex;
   flex-direction: column;
   animation: fadeUp 0.5s ease both;
+  cursor: pointer;
 }
 
 .product-card:hover {
@@ -900,4 +901,93 @@ footer p {
   .product-img-wrap {
     height: 160px;
   }
+}
+
+/* ---------- Popup de detalhe do produto ---------- */
+.product-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 40, 37, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 320;
+  padding: 20px;
+}
+.product-popup.open { display: flex; }
+
+.product-popup-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 92vh;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: fadeUp 0.3s ease both;
+}
+
+.product-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 2;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--c-text-sub);
+  cursor: pointer;
+}
+.product-popup-close:hover { background: #fff; color: var(--c-text); }
+
+.product-popup-img-wrap {
+  flex: 0 0 45%;
+  background: var(--c-bg);
+}
+.product-popup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-popup-body {
+  flex: 1;
+  padding: 32px 30px;
+  overflow-y: auto;
+}
+.product-popup-name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--c-forest);
+  margin: 4px 0 12px;
+}
+.product-popup-desc {
+  font-size: 15px;
+  color: var(--c-text-sub);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.product-popup-pricerow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.product-popup-add {
+  width: 100%;
+  justify-content: center;
+  font-size: 14px;
+  padding: 12px 18px;
+}
+
+@media (max-width: 640px) {
+  .product-popup-card { flex-direction: column; max-height: 88vh; overflow-y: auto; }
+  .product-popup-img-wrap { flex-basis: auto; height: 220px; }
 }

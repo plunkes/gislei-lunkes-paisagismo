@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../icons/gi_lunkes.svg">
   <title>Painel — Gislei Lunkes Paisagismo</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap"
@@ -25,6 +26,7 @@
   <div class="tabs">
     <button class="tab active" data-tab="produtos">Produtos &amp; Estoque</button>
     <button class="tab" data-tab="pedidos">Pedidos</button>
+    <button class="tab" data-tab="metricas">Métricas</button>
     <button class="tab" data-tab="config">Modo de Venda</button>
   </div>
 
@@ -64,6 +66,29 @@
           <tr><td colspan="6" class="loading">Carregando…</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- Métricas -->
+  <section class="panel" id="panel-metricas">
+    <div class="panel-head">
+      <h2>Métricas &amp; Estatísticas</h2>
+      <button class="btn btn-ghost btn-sm" style="width:auto" id="btn-reload-metrics">Atualizar</button>
+    </div>
+    <p class="metrics-note">Dados de uso 100% anônimos e agregados (LGPD): sem IP, usuário ou dados pessoais.</p>
+    <div class="alert" id="metrics-alert"></div>
+
+    <div class="stat-cards" id="stat-cards"></div>
+
+    <div class="metrics-grid">
+      <div class="metrics-card">
+        <h3>Páginas mais vistas</h3>
+        <div id="metrics-pages" class="bar-list"><p class="loading">Carregando…</p></div>
+      </div>
+      <div class="metrics-card">
+        <h3>Produtos mais adicionados ao carrinho</h3>
+        <div id="metrics-cart" class="bar-list"><p class="loading">Carregando…</p></div>
+      </div>
     </div>
   </section>
 
