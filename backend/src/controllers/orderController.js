@@ -10,6 +10,50 @@ const ORDER_STATUSES = [
 /** Valida formato de UUID v4 (PK dos produtos). */
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/** UF brasileira: duas letras. */
+const UF_RE = /^[A-Za-z]{2}$/;
+
+/**
+ * Valida e normaliza o endereço de entrega enviado no checkout. Lança 400 se
+ * algum campo obrigatório faltar. Retorna um objeto já com os nomes das colunas
+ * do model `Order`, pronto para espalhar em `Order.create`.
+ *
+ * @param {object} shipping - { cep, street, number, complement?, district, city, state }
+ * @returns {{ shippingCep: string, shippingStreet: string, shippingNumber: string,
+ *   shippingComplement: string|null, shippingDistrict: string, shippingCity: string,
+ *   shippingState: string }}
+ */
+function validateShipping(shipping) {
+  const s = shipping || {};
+  const cep = String(s.cep || '').replace(/\D/g, '');
+  const street = String(s.street || '').trim();
+  const number = String(s.number || '').trim();
+  const complement = String(s.complement || '').trim();
+  const district = String(s.district || '').trim();
+  const city = String(s.city || '').trim();
+  const state = String(s.state || '').trim().toUpperCase();
+
+  if (cep.length !== 8) {
+    throw new ApiError(400, 'Informe um CEP válido (8 dígitos).');
+  }
+  if (!street || !number || !district || !city) {
+    throw new ApiError(400, 'Preencha o endereço de entrega completo (rua, número, bairro e cidade).');
+  }
+  if (!UF_RE.test(state)) {
+    throw new ApiError(400, 'Informe a UF (2 letras).');
+  }
+
+  return {
+    shippingCep: `${cep.slice(0, 5)}-${cep.slice(5)}`,
+    shippingStreet: street.slice(0, 160),
+    shippingNumber: number.slice(0, 20),
+    shippingComplement: complement.slice(0, 80) || null,
+    shippingDistrict: district.slice(0, 80),
+    shippingCity: city.slice(0, 80),
+    shippingState: state.slice(0, 2),
+  };
+}
+
 /**
  * Build validated order line items from a cart payload, pricing each line from
  * the DB (never trusting client prices) and computing the total.
@@ -60,7 +104,7 @@ async function buildItems(cart) {
  * @type {import('express').RequestHandler}
  */
 async function create(req, res) {
-  const { customerName, customerEmail, customerPhone, cart, paymentMethod, notes } =
+  const { customerName, customerEmail, customerPhone, cart, paymentMethod, notes, shipping } =
     req.body || {};
 
   if (!customerName || !customerName.trim()) {
@@ -71,6 +115,7 @@ async function create(req, res) {
     throw new ApiError(400, 'Método de pagamento inválido.');
   }
 
+  const ship = validateShipping(shipping);
   const { items, total } = await buildItems(cart);
 
   const order = await sequelize.transaction(async (t) => {
@@ -84,6 +129,7 @@ async function create(req, res) {
         paymentMethod: method,
         status: 'pendente',
         notes: notes || null,
+        ...ship,
       },
       { transaction: t }
     );
@@ -145,4 +191,4 @@ async function updateStatus(req, res) {
   res.json({ order });
 }
 
-module.exports = { create, list, getOne, updateStatus, buildItems };
+module.exports = { create, list, getOne, updateStatus, buildItems, validateShipping };

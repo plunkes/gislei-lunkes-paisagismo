@@ -181,6 +181,43 @@
             <p id="co-email">—</p>
             <p id="co-telefone">—</p>
           </div>
+
+          <fieldset class="checkout-address">
+            <legend>Endereço de entrega</legend>
+            <div class="co-address-grid">
+              <div class="co-field co-cep">
+                <label for="ship-cep">CEP</label>
+                <input type="text" id="ship-cep" inputmode="numeric" autocomplete="postal-code"
+                  placeholder="00000-000" maxlength="9" required>
+              </div>
+              <div class="co-field co-street">
+                <label for="ship-street">Rua / Logradouro</label>
+                <input type="text" id="ship-street" autocomplete="address-line1" required>
+              </div>
+              <div class="co-field co-number">
+                <label for="ship-number">Número</label>
+                <input type="text" id="ship-number" required>
+              </div>
+              <div class="co-field co-complement">
+                <label for="ship-complement">Complemento <span>(opcional)</span></label>
+                <input type="text" id="ship-complement" placeholder="Apto, bloco, referência">
+              </div>
+              <div class="co-field co-district">
+                <label for="ship-district">Bairro</label>
+                <input type="text" id="ship-district" required>
+              </div>
+              <div class="co-field co-city">
+                <label for="ship-city">Cidade</label>
+                <input type="text" id="ship-city" autocomplete="address-level2" required>
+              </div>
+              <div class="co-field co-state">
+                <label for="ship-state">UF</label>
+                <input type="text" id="ship-state" maxlength="2" placeholder="SP"
+                  autocomplete="address-level1" required>
+              </div>
+            </div>
+          </fieldset>
+
           <p class="checkout-summary" id="checkout-summary"></p>
           <button type="submit" class="btn-checkout" id="checkout-submit">Ir para o pagamento</button>
           <a class="checkout-editlink" href="minha-conta.html">Editar meus dados</a>

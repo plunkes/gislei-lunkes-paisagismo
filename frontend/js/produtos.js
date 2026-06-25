@@ -535,6 +535,85 @@ function closeCheckout() {
 }
 
 /**
+ * Lê e valida o endereço de entrega do formulário. Retorna o objeto pronto para
+ * o backend, ou `null` se algum campo obrigatório estiver vazio (marca os campos
+ * inválidos para feedback visual).
+ * @returns {object|null}
+ */
+function readShipping() {
+  const val = (id) => document.getElementById(id);
+  const fields = {
+    cep: val('ship-cep'),
+    street: val('ship-street'),
+    number: val('ship-number'),
+    complement: val('ship-complement'),
+    district: val('ship-district'),
+    city: val('ship-city'),
+    state: val('ship-state'),
+  };
+  const required = ['cep', 'street', 'number', 'district', 'city', 'state'];
+  let ok = true;
+  required.forEach((k) => {
+    const empty = !fields[k].value.trim();
+    fields[k].classList.toggle('co-invalid', empty);
+    if (empty) ok = false;
+  });
+  const cepDigits = fields.cep.value.replace(/\D/g, '');
+  if (cepDigits.length !== 8) {
+    fields.cep.classList.add('co-invalid');
+    ok = false;
+  }
+  if (!ok) return null;
+
+  return {
+    cep: fields.cep.value.trim(),
+    street: fields.street.value.trim(),
+    number: fields.number.value.trim(),
+    complement: fields.complement.value.trim(),
+    district: fields.district.value.trim(),
+    city: fields.city.value.trim(),
+    state: fields.state.value.trim().toUpperCase(),
+  };
+}
+
+/** Aplica máscara de CEP (00000-000) no input. */
+function maskCep(input) {
+  const d = input.value.replace(/\D/g, '').slice(0, 8);
+  input.value = d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+}
+
+/**
+ * Consulta o ViaCEP e preenche rua/bairro/cidade/UF quando o CEP tem 8 dígitos.
+ * Falha em silêncio (offline ou CEP inexistente): o usuário preenche à mão.
+ * @returns {Promise<void>}
+ */
+async function lookupCep() {
+  const cepEl = document.getElementById('ship-cep');
+  const d = cepEl.value.replace(/\D/g, '');
+  if (d.length !== 8) return;
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${d}/json/`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.erro) return;
+    const setIfEmpty = (id, v) => {
+      const el = document.getElementById(id);
+      if (el && v && !el.value.trim()) {
+        el.value = v;
+        el.classList.remove('co-invalid');
+      }
+    };
+    setIfEmpty('ship-street', data.logradouro);
+    setIfEmpty('ship-district', data.bairro);
+    setIfEmpty('ship-city', data.localidade);
+    setIfEmpty('ship-state', data.uf);
+    document.getElementById('ship-number')?.focus();
+  } catch {
+    /* offline: preenchimento manual */
+  }
+}
+
+/**
  * Mostra a etapa de pagamento PIX (Infinite Pay) com QR Code.
  * @param {{ total: number, pix: { code: string, qrImageUrl: string } }} data
  */
@@ -559,6 +638,14 @@ async function submitCheckout(e) {
   const submit = document.getElementById('checkout-submit');
   alertBox.className = 'co-alert';
 
+  // checkout-3b: endereço de entrega obrigatório.
+  const shipping = readShipping();
+  if (!shipping) {
+    alertBox.textContent = 'Preencha o endereço de entrega completo.';
+    alertBox.className = 'co-alert error';
+    return;
+  }
+
   submit.disabled = true;
   const original = submit.textContent;
   submit.textContent = 'Processando…';
@@ -566,7 +653,10 @@ async function submitCheckout(e) {
   try {
     const data = await authFetch('/checkout', {
       method: 'POST',
-      body: JSON.stringify({ cart: cart.map((i) => ({ id: i.id, qnt: i.qnt })) }),
+      body: JSON.stringify({
+        cart: cart.map((i) => ({ id: i.id, qnt: i.qnt })),
+        shipping,
+      }),
     });
 
     // Pedido registrado: limpa o carrinho local.
@@ -605,6 +695,16 @@ if (cartPanel) {
 
 document.getElementById('checkout-form')?.addEventListener('submit', submitCheckout);
 document.getElementById('checkout-cancel')?.addEventListener('click', closeCheckout);
+
+// Endereço: máscara de CEP + autopreenchimento via ViaCEP.
+const cepInput = document.getElementById('ship-cep');
+if (cepInput) {
+  cepInput.addEventListener('input', () => maskCep(cepInput));
+  cepInput.addEventListener('blur', lookupCep);
+}
+document.getElementById('ship-state')?.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/[^A-Za-z]/g, '').toUpperCase();
+});
 document.getElementById('pix-done')?.addEventListener('click', () => {
   closeCheckout();
   showToast('Pedido registrado! Obrigado pela compra. 🌿', 'success');

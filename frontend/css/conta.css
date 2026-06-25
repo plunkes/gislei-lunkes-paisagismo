@@ -1,43 +1,113 @@
-/* Página Minha Conta — reusa a paleta de css/shared.css */
+/* Página Minha Conta — "Caderno do jardim".
+   Faixa botânica de boas-vindas + histórico de pedidos como diário/linha do tempo.
+   Reusa a paleta de css/shared.css (mesmas hues da marca). */
 
 .conta-wrap {
+  padding: 0 0 64px;
+  background: var(--c-bg);
+  min-height: calc(100vh - 200px);
+}
+
+/* ---------- Faixa de boas-vindas ---------- */
+.conta-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--c-dark) 0%, var(--c-forest) 65%, #3a4d40 100%);
+  color: var(--c-cream);
+  padding: 54px 24px;
+}
+/* Nervura circular de fundo (mesma linguagem do login do backoffice) */
+.conta-hero::after {
+  content: "";
+  position: absolute;
+  right: -90px;
+  top: -110px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  border: 1px solid rgba(132, 169, 140, 0.28);
+  box-shadow: 0 0 0 30px rgba(132, 169, 140, 0.07);
+  pointer-events: none;
+}
+
+.conta-hero-inner {
+  position: relative;
+  z-index: 1;
   max-width: 1040px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
 }
 
-.conta-wrap h1 {
+.conta-seal {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: rgba(240, 244, 238, 0.12);
+  border: 1px solid rgba(240, 244, 238, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.conta-seal svg {
+  width: 30px;
+  height: 30px;
+  fill: var(--c-sage);
+  stroke: var(--c-cream);
+  stroke-width: 1.2;
+}
+
+.conta-eyebrow {
   font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(30px, 4vw, 42px);
-  color: var(--c-forest);
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(240, 244, 238, 0.75);
+  margin-bottom: 2px;
 }
-
 .conta-greeting {
-  color: var(--c-text-sub);
-  margin-bottom: 32px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(30px, 4.5vw, 46px);
+  line-height: 1.05;
+  color: #fff;
+}
+.conta-hero-sub {
+  font-size: 14px;
+  color: rgba(240, 244, 238, 0.7);
+  margin-top: 8px;
 }
 
+/* ---------- Grade de cartões ---------- */
 .conta-grid {
+  max-width: 1040px;
+  margin: -28px auto 0;        /* sobe levemente sobre a faixa */
+  padding: 0 24px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.95fr 1.05fr;
   gap: 24px;
   align-items: start;
+  position: relative;
+  z-index: 2;
 }
 
 .conta-card {
   background: #fff;
-  border-radius: 12px;
-  padding: 28px 26px;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+  border: 1px solid #E1E7DD;
+  border-radius: 16px;
+  padding: 30px 28px;
+  box-shadow: 0 8px 30px rgba(27, 40, 37, 0.07);
 }
 
 .conta-card h2 {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 22px;
+  font-size: 23px;
   color: var(--c-forest);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #E1E7DD;
 }
 
 .conta-card .form-field {
@@ -48,24 +118,27 @@
 }
 
 .conta-card label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  color: var(--c-text);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-sub);
 }
 
 .conta-card input {
-  border: 1px solid rgba(40, 42, 39, 0.18);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border: 1px solid #E1E7DD;
+  border-radius: 9px;
+  padding: 11px 13px;
   font-family: var(--sans);
   font-size: 14px;
   color: var(--c-text);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .conta-card input:focus {
-  border-color: var(--c-mid);
+  border-color: var(--c-sage);
+  box-shadow: 0 0 0 3px rgba(132, 169, 140, 0.2);
 }
 
 .conta-card input:disabled {
@@ -80,20 +153,21 @@
 
 .btn-conta {
   width: 100%;
-  background: var(--c-mid);
+  background: var(--c-forest);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 9px;
+  padding: 13px;
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 500;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn-conta:hover {
-  background: var(--c-forest);
+  background: var(--c-dark);
 }
 
 .btn-conta:disabled {
@@ -103,13 +177,13 @@
 
 /* Zona de perigo */
 .danger-zone {
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid var(--c-bg);
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid #E1E7DD;
 }
 
 .danger-zone h3 {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--c-error);
   margin-bottom: 6px;
 }
@@ -121,21 +195,27 @@
 }
 
 .btn-danger {
-  background: var(--c-error);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
+  background: transparent;
+  color: var(--c-error);
+  border: 1px solid rgba(192, 57, 43, 0.35);
+  border-radius: 9px;
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.btn-danger:hover {
+  background: var(--c-error);
+  color: #fff;
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--c-text-sub);
   border: 1px solid var(--c-pale);
-  border-radius: 8px;
+  border-radius: 9px;
   padding: 10px 16px;
   font-size: 13px;
   cursor: pointer;
@@ -144,7 +224,7 @@
 .delete-confirm {
   margin-top: 14px;
   background: #fdecea;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 14px 16px;
 }
 
@@ -160,30 +240,65 @@
   justify-content: flex-end;
 }
 
-/* Pedidos */
+/* ---------- Pedidos como linha do tempo (diário) ---------- */
+#orders-list {
+  position: relative;
+}
+/* Haste vertical da linha do tempo */
+#orders-list:not(:empty)::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--c-pale);
+}
+
 .order-card {
-  border: 1px solid var(--c-bg);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
+  position: relative;
+  margin-left: 22px;
+  margin-bottom: 16px;
+  background: var(--c-cream);
+  border: 1px solid #E1E7DD;
+  border-radius: 12px;
+  padding: 15px 18px;
+}
+.order-card:last-child {
+  margin-bottom: 0;
+}
+/* Nó (broto) da linha do tempo */
+.order-card::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 18px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c-sage);
+  box-shadow: 0 0 0 3px var(--c-bg);
 }
 
 .order-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .order-date {
-  font-size: 13px;
-  color: var(--c-text-sub);
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--c-forest);
 }
 
 .order-status {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 11px;
   border-radius: 999px;
   background: #eef2ec;
   color: var(--c-forest);
@@ -207,41 +322,64 @@
 
 .order-items {
   list-style: none;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   padding: 0;
 }
 
 .order-items li {
   font-size: 13px;
   color: var(--c-text);
-  padding: 2px 0;
+  padding: 3px 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+}
+.order-items li:last-child {
+  border-bottom: none;
 }
 
 .order-foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid var(--c-bg);
-  padding-top: 8px;
-  font-size: 14px;
+  border-top: 1px solid #E1E7DD;
+  padding-top: 10px;
+  font-size: 13px;
+  color: var(--c-text-sub);
 }
 
 .order-foot strong {
   color: var(--c-forest);
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 19px;
 }
 
 .conta-loading,
 .conta-empty {
   color: var(--c-text-sub);
-  font-size: 14px;
+  font-family: var(--serif);
+  font-size: 16px;
   text-align: center;
-  padding: 24px 0;
+  padding: 28px 0;
 }
 
 @media (max-width: 760px) {
+  .conta-hero {
+    padding: 40px 20px;
+  }
+  .conta-hero-inner {
+    gap: 16px;
+  }
+  .conta-seal {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+  }
   .conta-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
   }
 }

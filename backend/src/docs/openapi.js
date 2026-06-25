@@ -351,9 +351,23 @@ const openapiSpec = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['cart'],
+                required: ['cart', 'shipping'],
                 properties: {
                   cart: { type: 'array', items: { $ref: '#/components/schemas/CartItem' } },
+                  shipping: {
+                    type: 'object',
+                    description: 'Endereço de entrega (obrigatório).',
+                    required: ['cep', 'street', 'number', 'district', 'city', 'state'],
+                    properties: {
+                      cep: { type: 'string', example: '13201-001' },
+                      street: { type: 'string', example: 'Rua das Flores' },
+                      number: { type: 'string', example: '123' },
+                      complement: { type: 'string', example: 'Apto 4' },
+                      district: { type: 'string', example: 'Centro' },
+                      city: { type: 'string', example: 'Jundiaí' },
+                      state: { type: 'string', example: 'SP', maxLength: 2 },
+                    },
+                  },
                   notes: { type: 'string' },
                 },
               },

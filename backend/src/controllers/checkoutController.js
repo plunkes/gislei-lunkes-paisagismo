@@ -1,7 +1,7 @@
 'use strict';
 
 const { sequelize, Order, OrderItem, User, SiteConfig } = require('../models');
-const { buildItems } = require('./orderController');
+const { buildItems, validateShipping } = require('./orderController');
 const { isValidPhone } = require('./authUserController');
 const { createCharge } = require('../services/infinitePay');
 const ApiError = require('../utils/ApiError');
@@ -21,6 +21,18 @@ function buildWhatsappUrl(number, order, items) {
         .toFixed(2)
         .replace('.', ',')}`
   );
+  // Bloco de endereço de entrega (formatado para a mensagem).
+  const complemento = order.shippingComplement ? ` - ${order.shippingComplement}` : '';
+  const enderecoLines = order.shippingStreet
+    ? [
+        '',
+        '*Endereço de entrega:*',
+        `${order.shippingStreet}, ${order.shippingNumber}${complemento}`,
+        `${order.shippingDistrict} — ${order.shippingCity}/${order.shippingState}`,
+        `CEP: ${order.shippingCep}`,
+      ]
+    : [];
+
   const msg = [
     `*Novo pedido — ${order.customerName}*`,
     '',
@@ -29,6 +41,7 @@ function buildWhatsappUrl(number, order, items) {
     `*Total: R$ ${Number(order.total).toFixed(2).replace('.', ',')}*`,
     order.customerPhone ? `Telefone: ${order.customerPhone}` : '',
     order.customerEmail ? `Email: ${order.customerEmail}` : '',
+    ...enderecoLines,
   ]
     .filter(Boolean)
     .join('\n');
@@ -66,11 +79,13 @@ async function checkout(req, res) {
     );
   }
 
-  const { cart, notes } = req.body || {};
+  const { cart, notes, shipping } = req.body || {};
   const config = await SiteConfig.getInstance();
   const ecommerceActive = config.ecommerceActive;
   const method = ecommerceActive ? 'infinitepay' : 'whatsapp';
 
+  // Endereço de entrega obrigatório (checkout-3b).
+  const ship = validateShipping(shipping);
   // Precifica/valida os itens no servidor (nunca confia no cliente).
   const { items, total } = await buildItems(cart);
 
@@ -86,6 +101,7 @@ async function checkout(req, res) {
         paymentMethod: method,
         status: 'pendente',
         notes: notes || null,
+        ...ship,
       },
       { transaction: t }
     );

@@ -228,7 +228,7 @@ async function loadOrders() {
   try {
     const { orders } = await api('/backoffice/orders');
     if (!orders.length) {
-      body.innerHTML = '<tr><td colspan="6" class="empty">Nenhum pedido ainda.</td></tr>';
+      body.innerHTML = '<tr><td colspan="7" class="empty">Nenhum pedido ainda.</td></tr>';
       return;
     }
     body.innerHTML = orders
@@ -242,6 +242,7 @@ async function loadOrders() {
         <tr>
           <td>${date}</td>
           <td>${esc(o.customerName)}<br><small style="color:#888">${esc(o.customerEmail || o.customerPhone || '')}</small></td>
+          <td>${formatAddress(o)}</td>
           <td>${itemCount}</td>
           <td>${brl(o.total)}</td>
           <td><span class="pill">${o.paymentMethod === 'infinitepay' ? 'Infinite Pay' : 'WhatsApp'}</span></td>
@@ -254,8 +255,24 @@ async function loadOrders() {
       sel.addEventListener('change', () => updateOrderStatus(sel.dataset.order, sel.value))
     );
   } catch (err) {
-    body.innerHTML = `<tr><td colspan="6" class="empty">${esc(err.message)}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" class="empty">${esc(err.message)}</td></tr>`;
   }
+}
+
+/**
+ * Formata o endereço de entrega de um pedido em HTML compacto (duas linhas +
+ * CEP). Mostra "—" quando o pedido não tem endereço (pedidos antigos).
+ * @param {object} o - Pedido.
+ * @returns {string}
+ */
+function formatAddress(o) {
+  if (!o.shippingStreet) return '<span style="color:#aaa">—</span>';
+  const comp = o.shippingComplement ? ` - ${esc(o.shippingComplement)}` : '';
+  return `<div class="order-addr">
+    <span>${esc(o.shippingStreet)}, ${esc(o.shippingNumber)}${comp}</span>
+    <span>${esc(o.shippingDistrict)} — ${esc(o.shippingCity)}/${esc(o.shippingState)}</span>
+    <small>CEP ${esc(o.shippingCep)}</small>
+  </div>`;
 }
 
 /** Atualiza o status de um pedido. */
@@ -377,7 +394,7 @@ async function loadAnalytics() {
   const alert = document.getElementById('metrics-alert');
   alert.className = 'alert';
   try {
-    const [{ byType, byPath, topCart }, { products }] = await Promise.all([
+    const [{ byType, byPath, topProducts, topCart }, { products }] = await Promise.all([
       api('/backoffice/analytics'),
       api('/backoffice/products'),
     ]);
@@ -403,6 +420,15 @@ async function loadAnalytics() {
       .map((r) => ({ label: PAGE_LABELS[r.path], total: Number(r.total) }))
       .sort((a, b) => b.total - a.total);
     renderBars(document.getElementById('metrics-pages'), pageRows);
+
+    // Produtos mais clicados (product_click agrupado por refId → nome).
+    renderBars(
+      document.getElementById('metrics-clicks'),
+      topProducts.map((r) => ({
+        label: nameById[String(r.refId)] || `Produto #${r.refId}`,
+        total: Number(r.total),
+      }))
+    );
 
     // Produtos mais adicionados ao carrinho (id → nome).
     renderBars(

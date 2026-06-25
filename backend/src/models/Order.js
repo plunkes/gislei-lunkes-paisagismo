@@ -65,6 +65,17 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      // --- Endereço de entrega (snapshot por pedido) -----------------------
+      // Colunas anuláveis no banco (para ALTER seguro em bases existentes); a
+      // presença é exigida pela API no checkout. A entrega pode mudar a cada
+      // pedido, por isso o endereço é gravado no pedido — não no usuário.
+      shippingCep: { type: DataTypes.STRING(9), allowNull: true },
+      shippingStreet: { type: DataTypes.STRING(160), allowNull: true },
+      shippingNumber: { type: DataTypes.STRING(20), allowNull: true },
+      shippingComplement: { type: DataTypes.STRING(80), allowNull: true },
+      shippingDistrict: { type: DataTypes.STRING(80), allowNull: true },
+      shippingCity: { type: DataTypes.STRING(80), allowNull: true },
+      shippingState: { type: DataTypes.STRING(2), allowNull: true },
       notes: {
         type: DataTypes.TEXT,
         allowNull: true,

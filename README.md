@@ -51,37 +51,52 @@ checkout dinâmico (Infinite Pay ou WhatsApp) e estatísticas de uso anônimas (
   Vanilla JS (persistido em `localStorage`), checkout dinâmico.
 - **Modo de venda dinâmico:** um *toggle* no backoffice define se o checkout usa a
   Infinite Pay (online) ou redireciona para o WhatsApp com o resumo do pedido.
-- **Backoffice** (`/backoffice`): login de funcionário, CRUD de produtos/estoque,
-  gestão de pedidos e configuração do modo de venda.
+- **Backoffice** (`/backoffice`): login de funcionário, CRUD de produtos/estoque
+  (com upload de imagens), gestão de pedidos, configuração do modo de venda e
+  painel de **métricas** (visitas, produtos mais clicados e mais adicionados ao
+  carrinho).
 - **Autenticação:** cadastro/login por e-mail+senha e login com Google.
+- **Minha Conta** (`minha-conta.html`): área logada do cliente para editar dados
+  cadastrais, ver o histórico de pedidos e excluir a conta.
 - **LGPD:** banner de consentimento de cookies, estatísticas 100% anônimas e
   agregadas, e `TERMOS_DE_USO.md`.
 
 ## Estrutura de pastas
 
+O repositório é dividido em dois diretórios irmãos: `frontend/` (estático) e
+`backend/` (Node/Express, que também serve o frontend).
+
 ```
 .
-├── public/                 # Frontend estático (servido pelo Express)
+├── frontend/               # Frontend estático (servido pelo Express)
 │   ├── index.html          # Landing page
 │   ├── produtos.html       # Loja / carrinho / checkout
 │   ├── login.html          # Login de usuário
 │   ├── signup.html         # Cadastro de usuário
+│   ├── minha-conta.html    # Área logada do cliente
 │   ├── backoffice/         # Painel de funcionários (protegido)
 │   ├── css/                # Estilos (paleta verde compartilhada)
-│   ├── js/                 # main.js, produtos.js, login.js, signup.js
+│   ├── js/                 # main.js, produtos.js, login.js, signup.js, auth.js, minha-conta.js
 │   └── imgs/ icons/ videos/
-├── src/                    # Backend
-│   ├── config/database.js  # Conexão Sequelize
-│   ├── models/             # User, Employee, Product, Order, OrderItem, SiteConfig, Analytics
-│   ├── controllers/        # Lógica das rotas
-│   ├── middlewares/        # auth, errorHandler, rateLimit, analytics
-│   ├── routes/             # authUser, public, backoffice
-│   ├── services/           # infinitePay.js (integração de pagamento)
-│   ├── scripts/            # sync.js (cria tabelas), seed.js (dados iniciais)
-│   └── server.js           # App Express (API + estáticos)
+├── backend/                # Backend (Node.js/Express) + package.json + .env
+│   ├── package.json
+│   ├── uploads/            # Imagens de produto enviadas pelo backoffice
+│   └── src/
+│       ├── config/         # database.js (Sequelize) + waitForDb.js
+│       ├── models/         # User, Employee, Product, Order, OrderItem, SiteConfig, Analytics
+│       ├── controllers/    # Lógica das rotas
+│       ├── middlewares/    # auth, errorHandler, rateLimit, analytics, upload
+│       ├── routes/         # authUser, public, backoffice, account
+│       ├── services/       # infinitePay.js (integração de pagamento)
+│       ├── docs/           # openapi.js (Swagger)
+│       ├── scripts/        # sync.js (cria tabelas), seed.js (dados iniciais)
+│       └── server.js       # App Express (API + estáticos de ../frontend)
+├── Makefile                # Atalhos para Docker (make help)
+├── docker-compose.yml      # db + app + adminer
+├── Dockerfile
 ├── TERMOS_DE_USO.md        # Política de privacidade (LGPD)
-├── .env.example            # Modelo de variáveis de ambiente
-└── package.json
+├── .env / .env.example     # Variáveis de ambiente (na raiz do repo)
+└── README.md
 ```
 
 ## Como rodar
@@ -93,7 +108,10 @@ checkout dinâmico (Infinite Pay ou WhatsApp) e estatísticas de uso anônimas (
 
 ### Instalação
 
+O `package.json` fica em `backend/`. Os comandos `npm` rodam a partir de lá:
+
 ```bash
+cd backend
 npm install
 ```
 
@@ -101,9 +119,10 @@ npm install
 
 Você pode rodar e navegar pelo site **sem banco de dados**. O servidor sobe
 normalmente (apenas exibe um aviso de "sem conexão com o banco") e serve todas as
-páginas estáticas. O frontend foi feito para degradar com elegância:
+páginas estáticas (de `../frontend`). O frontend foi feito para degradar com elegância:
 
 ```bash
+cd backend
 npm install
 npm start
 # Abra http://localhost:3000
@@ -113,7 +132,7 @@ npm start
 
 - Todas as páginas (landing, loja, login, signup, backoffice/login).
 - Catálogo da loja: usa um **catálogo de fallback** embutido (`FALLBACK_PRODUCTS`
-  em `public/js/produtos.js`) quando a API não responde.
+  em `frontend/js/produtos.js`) quando a API não responde.
 - Navegação, sidebar mobile, FAQ, carrinho (em `localStorage`), banner de cookies.
 - Botão de WhatsApp (usa o número padrão quando a config não está disponível).
 
@@ -123,27 +142,28 @@ npm start
   finalização de checkout e estatísticas.
 
 > Dica: para abrir só o frontend sem subir o Node, você também pode abrir os
-> arquivos de `public/` diretamente ou com qualquer servidor estático — mas o
+> arquivos de `frontend/` diretamente ou com qualquer servidor estático — mas o
 > recomendado é `npm start`, pois algumas chamadas usam caminhos `/api` e `/`.
 
 ### Rodando COM o PostgreSQL (stack completa)
 
 1. Crie um banco no Postgres (ex.: `gislei_lunkes`).
-2. Configure o ambiente:
+2. Configure o ambiente (o `.env` fica na **raiz** do repositório):
 
    ```bash
    cp .env.example .env
    # edite o .env: DB_*, JWT_SECRET, e (opcional) GOOGLE_* / INFINITEPAY_* / WHATSAPP_NUMBER
    ```
 
-3. Crie as tabelas e popule os dados iniciais:
+3. A partir de `backend/`, crie as tabelas e popule os dados iniciais:
 
    ```bash
+   cd backend
    npm run db:sync     # cria/atualiza todas as tabelas a partir dos models
    npm run db:seed     # cria o admin do backoffice + catálogo inicial
    ```
 
-4. Suba o servihttp://localhost:3000/backoffice/login.htmldor:
+4. Suba o servidor:
 
    ```bash
    npm start           # ou: npm run dev  (reinício automático)
@@ -171,6 +191,10 @@ A forma mais simples de subir tudo (banco + app + GUI do banco):
 docker compose up --build
 ```
 
+> Há um `Makefile` na raiz com atalhos: `make up` (sobe em background),
+> `make logs`, `make down`, `make db-sync`, `make db-seed`, `make clean`
+> (remove os volumes do banco) e outros. Rode `make help` para a lista completa.
+
 Serviços:
 
 - **db** — PostgreSQL.
@@ -194,14 +218,14 @@ A documentação interativa de todas as rotas REST fica em:
 ## Banco de dados — tabelas
 
 As tabelas são criadas automaticamente por `npm run db:sync` (a partir dos models
-em `src/models/`). São **7 tabelas**:
+em `backend/src/models/`). São **7 tabelas**:
 
 | Tabela | Model | Descrição | Campos principais |
 |--------|-------|-----------|-------------------|
 | `users` | `User` | Clientes finais (local + Google) | `id` (UUID), `name`, `email` (único), `password_hash`, `google_id`, `provider`, `avatar_url` |
 | `employees` | `Employee` | Funcionários do backoffice | `id` (UUID), `name`, `email` (único), `password_hash`, `role` (`admin`/`funcionario`), `active` |
 | `products` | `Product` | Catálogo (kokedamas, arranjos, vasos, serviços, acessórios) | `id` (UUID), `name`, `description`, `category`, `badge`, `price`, `old_price`, `image_url`, `quantity`, `stock_status`, `active` |
-| `orders` | `Order` | Pedidos realizados | `id` (UUID), `user_id`, `customer_name`, `customer_email`, `customer_phone`, `total`, `payment_method` (`infinitepay`/`whatsapp`), `status`, `payment_ref`, `notes` |
+| `orders` | `Order` | Pedidos realizados | `id` (UUID), `user_id` (FK→`users`, nulo p/ convidado), `customer_name`, `customer_email`, `customer_phone`, `total`, `payment_method` (`infinitepay`/`whatsapp`), `status`, `payment_ref`, **endereço de entrega** (`shipping_cep`, `shipping_street`, `shipping_number`, `shipping_complement`, `shipping_district`, `shipping_city`, `shipping_state`), `notes` |
 | `order_items` | `OrderItem` | Itens de cada pedido (snapshot de nome/preço) | `id` (UUID), `order_id`, `product_id`, `product_name`, `unit_price`, `quantity` |
 | `site_config` | `SiteConfig` | Configuração global (linha única) | `id` (=1), `ecommerce_active`, `whatsapp_number`, `store_name` |
 | `analytics` | `Analytics` | Estatísticas anônimas agregadas (LGPD) | `id` (UUID), `day`, `event_type`, `path`, `ref_id`, `count` |

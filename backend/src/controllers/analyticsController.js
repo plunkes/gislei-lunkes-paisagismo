@@ -32,8 +32,10 @@ async function track(req, res) {
 /**
  * GET /api/backoffice/analytics — resumo agregado para uso interno. Funcionário.
  *
- * Retorna totais por tipo de evento e por caminho. Todos os dados já são
- * anônimos e agregados na origem.
+ * Retorna: `byType` (totais por tipo de evento — inclui a soma total de cliques
+ * em produtos), `byPath` (visitas por caminho), `topProducts` (produtos mais
+ * clicados, por refId) e `topCart` (mais adicionados ao carrinho). Todos os
+ * dados já são anônimos e agregados na origem.
  *
  * @type {import('express').RequestHandler}
  */

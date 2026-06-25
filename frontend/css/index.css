@@ -13,6 +13,19 @@ body {
   inset: 0;
 }
 
+/* Scrim para legibilidade do texto sobre o vídeo. */
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(27, 40, 37, 0.62) 0%,
+    rgba(27, 40, 37, 0.34) 42%,
+    rgba(27, 40, 37, 0) 72%
+  );
+}
+
 #bg-video {
   width: 100vw;
   height: clamp(400px, 100vh, 1000px);
@@ -22,40 +35,173 @@ body {
 
 .hero-overlay {
   position: absolute;
-  left: 40px;
-  bottom: 60px;
-  max-width: 520px;
-  background: rgba(66, 84, 70, 0.5);
-  backdrop-filter: blur(2px);
-  padding: 48px 56px;
-  border-radius: 2px;
+  left: clamp(20px, 6vw, 80px);
+  bottom: 84px;
+  max-width: 560px;
   animation: fadeUp 0.9s ease both;
   animation-delay: 0.2s;
 }
 
+.hero-eyebrow {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--c-mint);
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
 .hero-overlay h2 {
   font-family: var(--serif);
-  font-size: clamp(28px, 3.5vw, 44px);
+  font-size: clamp(30px, 4vw, 50px);
   font-weight: 400;
   font-style: italic;
   color: var(--c-white);
-  line-height: 1.3;
-  margin-bottom: 16px;
+  line-height: 1.22;
+  margin-bottom: 28px;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
 }
 
-.hero-overlay p {
-  font-family: var(--serif);
-  font-size: 30px;
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 14px;
   font-weight: 500;
-  font-style: italic;
+  letter-spacing: 0.04em;
+  transition: background 0.25s, color 0.25s, transform 0.15s, border-color 0.25s;
+}
+
+.hero-btn.primary {
+  background: var(--c-cream);
+  color: var(--c-forest);
+}
+
+.hero-btn.primary:hover {
+  background: var(--c-sage);
+  color: var(--c-dark);
+  transform: translateY(-2px);
+}
+
+.hero-btn.ghost {
+  border: 1px solid rgba(240, 244, 238, 0.6);
   color: var(--c-white);
-  text-align: right;
+}
+
+.hero-btn.ghost:hover {
+  background: rgba(240, 244, 238, 0.14);
+  border-color: var(--c-white);
+  transform: translateY(-2px);
+}
+
+/* Indicador de rolagem */
+.hero-scroll {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(240, 244, 238, 0.8);
+}
+
+.hero-scroll-dot {
+  width: 24px;
+  height: 38px;
+  border: 1.5px solid rgba(240, 244, 238, 0.7);
+  border-radius: 14px;
+  position: relative;
+}
+
+.hero-scroll-dot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 4px;
+  height: 7px;
+  margin-left: -2px;
+  background: var(--c-cream);
+  border-radius: 3px;
+  animation: scrollDot 1.8s ease-in-out infinite;
+}
+
+.hero-scroll-text {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@keyframes scrollDot {
+  0% { opacity: 0; transform: translateY(0); }
+  35% { opacity: 1; }
+  70% { opacity: 1; transform: translateY(12px); }
+  100% { opacity: 0; transform: translateY(14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-dot::after { animation: none; opacity: 1; }
 }
 
 .divider {
-  height: 6px;
-  background: var(--c-mint);
-  padding: 4px 0;
+  position: relative;
+  padding: 26px 0;
+  background: var(--c-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-sage), transparent);
+}
+
+/* Marca botânica que "quebra" a linha — semente/folha do ateliê. */
+.divider::after {
+  content: "";
+  position: relative;
+  z-index: 1;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--c-cream) no-repeat center / 22px 22px
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2384A98C'%3E%3Cpath d='M12 2C7 5 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-3-9-8-12z'/%3E%3Cpath d='M12 22V6' stroke='%23F0F4EE' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
+}
+
+/* ---------- Reveal ao rolar (aplicado via JS a seções do conteúdo) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .quem-somos {
@@ -116,7 +262,7 @@ body {
 
 .servicos {
   background: var(--c-sage);
-  padding: 80px 60px 40px;
+  padding: 72px 24px 56px;
 }
 
 .servicos h2 {
@@ -124,14 +270,16 @@ body {
   font-size: clamp(36px, 4vw, 52px);
   font-weight: 300;
   color: var(--c-white);
-  margin-bottom: 32px;
+  margin: 0 auto 28px;
+  max-width: 780px;
 }
 
 .servicos-desc {
   background: rgba(66, 84, 70, 0.35);
   border-radius: 4px;
-  padding: 36px 48px;
-  margin-bottom: 48px;
+  padding: 36px 44px;
+  max-width: 780px;
+  margin: 0 auto;
 }
 
 .servicos-desc p {
@@ -220,32 +368,79 @@ body {
 .contato {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
-  min-height: 500px;
+  min-height: 460px;
+  max-width: 1080px;
+  margin: 56px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(27, 40, 37, 0.12);
 }
 
 .contato-info {
-  background: var(--c-forest);
-  padding: 60px 48px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--c-forest) 0%, var(--c-dark) 100%);
+  padding: 56px 48px;
   display: flex;
   flex-direction: column;
   color: var(--c-pale);
 }
+/* Nervura botânica de fundo (cohesão com login/conta). */
+.contato-info::after {
+  content: "";
+  position: absolute;
+  right: -90px;
+  bottom: -110px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(132, 169, 140, 0.3);
+  box-shadow: 0 0 0 28px rgba(132, 169, 140, 0.08);
+  pointer-events: none;
+}
+
+.contato-eyebrow {
+  position: relative;
+  z-index: 1;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--c-sage);
+  margin-bottom: 4px;
+}
 
 .contato-info h2 {
+  position: relative;
+  z-index: 1;
   font-family: var(--serif);
   font-size: clamp(28px, 4vw, 40px);
   font-weight: 300;
-  margin-bottom: 40px;
+  color: #fff;
+  margin-bottom: 32px;
 }
 
 .contato-info .info-item {
-  font-size: 18px;
-  line-height: 1.8;
-  opacity: 0.8;
-  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(240, 244, 238, 0.88);
+  margin-bottom: 12px;
+}
+
+.contato-info .info-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: var(--c-sage);
 }
 
 .contato-social {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 14px;
   margin-top: auto;
@@ -274,11 +469,15 @@ body {
   overflow: hidden;
 }
 
+.contato-form-area {
+  background: var(--c-cream);
+}
+
 .contato-form-bg {
   position: absolute;
   inset: 0;
   background: url("../imgs/krystal-ng-jRp60R7ogNQ-unsplash.jpg") center/cover no-repeat;
-  opacity: 0.3;
+  opacity: 0.18;
 }
 
 .contato-form-wrapper {
@@ -289,6 +488,14 @@ body {
   flex-direction: column;
   justify-content: center;
   height: 100%;
+}
+
+.contato-form-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--c-forest);
+  margin-bottom: 20px;
 }
 
 .contato-form-wrapper .form-field {
@@ -307,20 +514,21 @@ body {
 
 .contato-form-wrapper input,
 .contato-form-wrapper textarea {
-  background: var(--c-pale);
-  border: 1px solid rgba(40, 42, 39, 0.15);
-  border-radius: 3px;
-  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(66, 84, 70, 0.18);
+  border-radius: 8px;
+  padding: 12px 14px;
   font-family: var(--sans);
   font-size: 14px;
   color: var(--c-text);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .contato-form-wrapper input:focus,
 .contato-form-wrapper textarea:focus {
-  border-color: var(--c-mid);
+  border-color: var(--c-sage);
+  box-shadow: 0 0 0 3px rgba(132, 169, 140, 0.22);
 }
 
 .contato-form-wrapper textarea {
@@ -354,6 +562,8 @@ body {
 
 /* ---------- Botão WhatsApp (contato) ---------- */
 .btn-whatsapp-contato {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -376,6 +586,16 @@ body {
 .portfolio {
   background: var(--c-bg);
   padding: 72px 60px;
+}
+
+/* Sobrescreve eyebrow editorial em seções centralizadas. */
+.section-eyebrow {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--c-mid);
+  text-align: center;
+  margin-bottom: 2px;
 }
 
 .portfolio h2 {
@@ -418,6 +638,32 @@ body {
 
 .portfolio-item:hover img {
   transform: scale(1.07);
+}
+
+.portfolio-item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 28px 16px 14px;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(27, 40, 37, 0.78), rgba(27, 40, 37, 0));
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.portfolio-item:hover figcaption,
+.portfolio-item:focus-within figcaption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  /* Touch: legenda sempre visível. */
+  .portfolio-item figcaption { opacity: 1; transform: none; }
 }
 
 /* ---------- FAQ ---------- */
@@ -521,8 +767,12 @@ body {
   .hero-overlay {
     left: 16px;
     right: 16px;
-    bottom: 24px;
-    padding: 28px 32px;
+    bottom: 28px;
+    max-width: none;
+  }
+
+  .hero-scroll {
+    display: none;
   }
 
   .quem-somos {
@@ -551,6 +801,7 @@ body {
 
   .contato {
     grid-template-columns: 1fr;
+    margin: 40px 16px;
   }
 
   .contato-info {

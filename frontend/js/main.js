@@ -198,10 +198,43 @@ function showToast(message, type = 'info', duration = 3500) {
 }
 window.showToast = showToast;
 
+/**
+ * Revela as seções de conteúdo conforme entram na viewport (fade + subida).
+ * Só atua nas seções da página inicial; em outras páginas é um no-op. Respeita
+ * `prefers-reduced-motion` e degrada para conteúdo visível sem IntersectionObserver.
+ */
+function initReveal() {
+  const els = document.querySelectorAll(
+    '.quem-somos, .servicos, .cards-section, .portfolio, .faq, .contato'
+  );
+  if (!els.length) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('reveal', 'is-visible'));
+    return;
+  }
+
+  els.forEach((el) => el.classList.add('reveal'));
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+  );
+  els.forEach((el) => observer.observe(el));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initFaq();
   initWhatsApp();
   initCookieBanner();
   initPhoneMasks();
+  initReveal();
 });
