@@ -808,6 +808,25 @@ body {
     padding: 40px 24px;
   }
 
+  .btn-whatsapp-contato {
+    align-self: stretch;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Painel empilhado e curto: não fixa os sociais na borda inferior. */
+  .contato-social {
+    margin-top: 24px;
+  }
+
+  /* Anel botânico menor pra não cortar atrás do conteúdo. */
+  .contato-info::after {
+    width: 200px;
+    height: 200px;
+    right: -70px;
+    bottom: -80px;
+  }
+
   .portfolio,
   .faq {
     padding: 48px 24px;
@@ -820,5 +839,21 @@ body {
 
   .contato-form-wrapper {
     padding: 32px 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .contato-info .info-item {
+    align-items: flex-start;
+    word-break: break-word;
+  }
+
+  .contato-info .info-item svg {
+    margin-top: 4px;
+  }
+
+  .btn-whatsapp-contato {
+    padding: 12px 14px;
+    font-size: 13px;
   }
 }
